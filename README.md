@@ -40,17 +40,3 @@ ExtraPrompt =
 
 - [BepInEx](https://github.com/BepInEx/BepInEx) for Among Us (IL2CPP)
 - An API key from [Zhipu AI](https://open.bigmodel.cn/) (free tier available), OpenAI, or any compatible provider
-
-## How It Works
-
-TranslateUs hooks into Among Us' chat pipeline at three points:
-
-- **Sending** — Intercepts `RpcSendChat`, translates to the lobby language, then sends
-- **Receiving** — Catches `AddChat`, translates incoming messages asynchronously
-- **Opening chat** — Scans untranslated messages and batch-translates them in one request
-
-Every message is tracked with a `MessageGroup` storing both the original and translated text, which powers the right-click toggle.
-
-## License
-
-MIT
