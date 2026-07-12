@@ -15,4 +15,8 @@
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Stop.png" />
+    <EmbeddedResource Include="Resources\Resume.png" />
+  </ItemGroup>
 </Project>

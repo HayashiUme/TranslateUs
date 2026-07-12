@@ -6,7 +6,7 @@ using HarmonyLib;
 
 namespace TranslateUs
 {
-    [BepInPlugin("ume.transalte.us", "Translate Us", "1.0.0")]
+    [BepInPlugin("ume.transalte.us", "Translate Us", "1.1.0")]
     public class Main : BasePlugin
     {
         public static ManualLogSource Logger = null!;
@@ -20,6 +20,16 @@ namespace TranslateUs
         public static ConfigEntry<string> Model { get; private set; } = null!;
         /// <summary>Extra prompt appended to every translation request.</summary>
         public static ConfigEntry<string> ExtraPrompt { get; private set; } = null!;
+        public static ConfigEntry<bool> UseGoogleFallback { get; private set; } = null!;
+        public static bool IsPaused { get; private set; }
+        public static event Action<bool>? OnPauseChanged;
+
+        public static void TogglePause()
+        {
+            IsPaused = !IsPaused;
+            OnPauseChanged?.Invoke(IsPaused);
+            Logger.LogInfo($"TranslateUs: Translation {(IsPaused ? "PAUSED" : "RESUMED")}");
+        }
 
         public override void Load()
         {
@@ -50,6 +60,11 @@ namespace TranslateUs
                 "",
                 "Extra instructions appended to the translation prompt. " +
                 "Use this to fine-tune translation behavior (e.g. 'Use informal tone', 'Keep names untranslated').");
+
+            UseGoogleFallback = Config.Bind(
+                "AI", "UseGoogleFallback", true,
+                "When true, falls back to free Google Translate if the AI API is unconfigured or fails. " +
+                "Set to false to disable Google Translate entirely (useful if Google is blocked in your region).");
 
             Harmony = new Harmony("ume.transalte.us");
             Harmony.PatchAll();

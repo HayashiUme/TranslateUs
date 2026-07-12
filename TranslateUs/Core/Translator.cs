@@ -10,24 +10,47 @@ public class Translator
     public static async Task<(string original, string translated)> Translate(
         string originalMessage, PlayerControl sourcePlayer, bool forSending)
     {
-        if (!IsApiConfigured())
+        if (Main.IsPaused)
             return (originalMessage, originalMessage);
 
-        string targetLanguage = forSending
-            ? GetLobbyLanguageName()
-            : GetClientLanguageName();
+        // If sending but lobby language is unknown, don't translate
+        if (forSending && !IsLobbyLanguageKnown())
+            return (originalMessage, originalMessage);
 
-        string prompt = BuildSinglePrompt(originalMessage, targetLanguage);
-        var payload = BuildPayload(prompt);
+        if (IsApiConfigured())
+        {
+            string targetLanguage = forSending
+                ? GetLobbyLanguageName()
+                : GetClientLanguageName();
+
+            string prompt = BuildSinglePrompt(originalMessage, targetLanguage);
+            var payload = BuildPayload(prompt);
+
+            try
+            {
+                string responseText = await SendApiRequest(payload);
+                return (originalMessage, responseText);
+            }
+            catch (Exception ex)
+            {
+                Main.Logger.LogWarning($"TranslateUs: AI translation failed, falling back to Google: {ex.Message}");
+            }
+        }
+
+        if (!Main.UseGoogleFallback.Value)
+            return (originalMessage, originalMessage);
 
         try
         {
-            string responseText = await SendApiRequest(payload);
-            return (originalMessage, responseText);
+            string targetCode = GetGoogleLanguageCode(forSending);
+            string translated = await TranslateViaGoogle(originalMessage, targetCode);
+            if (translated != originalMessage)
+                Main.Logger.LogInfo($"TranslateUs: [Google] \"{originalMessage}\" → \"{translated}\"");
+            return (originalMessage, translated);
         }
         catch (Exception ex)
         {
-            Main.Logger.LogError($"TranslateUs: Single translation failed: {ex.Message}");
+            Main.Logger.LogError($"TranslateUs: Google translation failed: {ex.Message}");
             return (originalMessage, originalMessage);
         }
     }
@@ -35,25 +58,183 @@ public class Translator
     public static async Task<List<(string original, string translated)>> BatchTranslate(
         List<string> messages, bool forSending)
     {
-        if (!IsApiConfigured() || messages.Count == 0)
+        if (messages.Count == 0)
             return messages.Select(m => (m, m)).ToList();
 
-        string targetLanguage = forSending
-            ? GetLobbyLanguageName()
-            : GetClientLanguageName();
+        // If sending but lobby language is unknown, don't translate
+        if (forSending && !IsLobbyLanguageKnown())
+            return messages.Select(m => (m, m)).ToList();
 
-        string prompt = BuildBatchPrompt(messages, targetLanguage);
-        var payload = BuildPayload(prompt);
+        if (IsApiConfigured())
+        {
+            string targetLanguage = forSending
+                ? GetLobbyLanguageName()
+                : GetClientLanguageName();
+
+            string prompt = BuildBatchPrompt(messages, targetLanguage);
+            var payload = BuildPayload(prompt);
+
+            try
+            {
+                string responseText = await SendApiRequest(payload);
+                var results = ParseBatchResponse(messages, responseText);
+                if (results.Any(r => r.translated != r.original))
+                    return results;
+                Main.Logger.LogWarning("TranslateUs: AI batch returned no translations, falling back to Google");
+            }
+            catch (Exception ex)
+            {
+                Main.Logger.LogWarning($"TranslateUs: AI batch translation failed, falling back to Google: {ex.Message}");
+            }
+        }
+
+        if (!Main.UseGoogleFallback.Value)
+            return messages.Select(m => (m, m)).ToList();
 
         try
         {
-            string responseText = await SendApiRequest(payload);
-            return ParseBatchResponse(messages, responseText);
+            string targetCode = GetGoogleLanguageCode(forSending);
+            var tasks = messages.Select(async m =>
+            {
+                try
+                {
+                    string translated = await TranslateViaGoogle(m, targetCode);
+                    return (original: m, translated);
+                }
+                catch
+                {
+                    return (original: m, translated: m);
+                }
+            });
+            var results = await Task.WhenAll(tasks);
+            Main.Logger.LogInfo($"TranslateUs: [Google Batch] Translated {results.Count(r => r.translated != r.original)}/{messages.Count} messages");
+            return results.ToList();
         }
         catch (Exception ex)
         {
-            Main.Logger.LogError($"TranslateUs: Batch translation failed: {ex.Message}");
+            Main.Logger.LogError($"TranslateUs: Google batch translation failed: {ex.Message}");
             return messages.Select(m => (m, m)).ToList();
+        }
+    }
+
+    private static async Task<string> TranslateViaGoogle(string text, string targetLangCode)
+    {
+        string url = $"https://translate.googleapis.com/translate_a/single" +
+                     $"?client=gtx&sl=auto&tl={targetLangCode}&dt=t&q={Uri.EscapeDataString(text)}";
+
+        using var client = new HttpClient();
+        client.Timeout = TimeSpan.FromSeconds(10);
+
+        string responseJson = await client.GetStringAsync(url);
+
+        // Response format: [[["translated", "original", null, null, 1]], null, "source_lang"]
+        using JsonDocument doc = JsonDocument.Parse(responseJson);
+        var root = doc.RootElement;
+
+        if (root.ValueKind == JsonValueKind.Array &&
+            root.GetArrayLength() > 0 &&
+            root[0].ValueKind == JsonValueKind.Array &&
+            root[0].GetArrayLength() > 0 &&
+            root[0][0].ValueKind == JsonValueKind.Array &&
+            root[0][0].GetArrayLength() > 0)
+        {
+            string translated = root[0][0][0].GetString() ?? text;
+            return translated.Trim();
+        }
+
+        return text;
+    }
+
+    private static string GetGoogleLanguageCode(bool forSending)
+    {
+        try
+        {
+            if (forSending)
+            {
+                var manager = GameOptionsManager.Instance;
+                var keywords = manager?.CurrentGameOptions?.Keywords
+                            ?? manager?.GameHostOptions?.Keywords;
+
+                if (keywords == null || keywords == GameKeywords.Other || keywords == GameKeywords.All)
+                    return ClientLangToGoogleCode();
+
+                return keywords switch
+                {
+                    GameKeywords.English => "en",
+                    GameKeywords.SpanishLA => "es",
+                    GameKeywords.Brazilian => "pt",
+                    GameKeywords.Portuguese => "pt",
+                    GameKeywords.Korean => "ko",
+                    GameKeywords.Russian => "ru",
+                    GameKeywords.Dutch => "nl",
+                    GameKeywords.Filipino => "tl",
+                    GameKeywords.French => "fr",
+                    GameKeywords.German => "de",
+                    GameKeywords.Italian => "it",
+                    GameKeywords.Japanese => "ja",
+                    GameKeywords.SpanishEU => "es",
+                    GameKeywords.Arabic => "ar",
+                    GameKeywords.Polish => "pl",
+                    GameKeywords.SChinese => "zh-CN",
+                    GameKeywords.TChinese => "zh-TW",
+                    GameKeywords.Irish => "ga",
+                    _ => ClientLangToGoogleCode()
+                };
+            }
+
+            return ClientLangToGoogleCode();
+        }
+        catch
+        {
+            return "zh-CN";
+        }
+    }
+
+    private static string ClientLangToGoogleCode()
+    {
+        try
+        {
+            return DataManager.Settings.Language.CurrentLanguage switch
+            {
+                SupportedLangs.English => "en",
+                SupportedLangs.Spanish => "es",
+                SupportedLangs.Korean => "ko",
+                SupportedLangs.Russian => "ru",
+                SupportedLangs.Portuguese => "pt",
+                SupportedLangs.Brazilian => "pt",
+                SupportedLangs.Filipino => "tl",
+                SupportedLangs.French => "fr",
+                SupportedLangs.Italian => "it",
+                SupportedLangs.German => "de",
+                SupportedLangs.Dutch => "nl",
+                SupportedLangs.Japanese => "ja",
+                SupportedLangs.Latam => "es",
+                SupportedLangs.Irish => "ga",
+                SupportedLangs.SChinese => "zh-CN",
+                SupportedLangs.TChinese => "zh-TW",
+                _ => "zh-CN"
+            };
+        }
+        catch
+        {
+            return "zh-CN";
+        }
+    }
+
+    private static bool IsLobbyLanguageKnown()
+    {
+        try
+        {
+            var manager = GameOptionsManager.Instance;
+            var keywords = manager?.CurrentGameOptions?.Keywords
+                        ?? manager?.GameHostOptions?.Keywords;
+            return keywords != null
+                && keywords != GameKeywords.Other
+                && keywords != GameKeywords.All;
+        }
+        catch
+        {
+            return false;
         }
     }
 
@@ -130,7 +311,6 @@ public class Translator
     {
         try
         {
-            // Strip markdown code fences if present
             responseText = responseText
                 .Replace("```json", "").Replace("```", "").Trim();
 
@@ -153,7 +333,7 @@ public class Translator
                 }
                 else
                 {
-                    translated = originals[i]; // Missing entry
+                    translated = originals[i];
                 }
                 results.Add((originals[i], translated));
             }
@@ -204,8 +384,6 @@ public class Translator
         try
         {
             var manager = GameOptionsManager.Instance;
-            // CurrentGameOptions works for both host and client;
-            // GameHostOptions is only set when YOU are the host
             var keywords = manager?.CurrentGameOptions?.Keywords
                         ?? manager?.GameHostOptions?.Keywords;
 
