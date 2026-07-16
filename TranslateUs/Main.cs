@@ -6,21 +6,48 @@ using HarmonyLib;
 
 namespace TranslateUs
 {
-    [BepInPlugin("ume.transalte.us", "Translate Us", "1.1.0")]
+    [BepInPlugin("ume.transalte.us", "Translate Us", "1.2.0")]
     public class Main : BasePlugin
     {
         public static ManualLogSource Logger = null!;
         public static Harmony Harmony = null!;
-        
-        /// <summary>API Key for the translation service.</summary>
+
+        /// <summary>
+        /// API Key for the AI translation service. Leave empty to use Google Translate.
+        /// </summary>
         public static ConfigEntry<string> ApiKey { get; private set; } = null!;
-        /// <summary>API endpoint URL.</summary>
+        
+        /// <summary>
+        /// API endpoint URL (OpenAI-compatible).
+        /// </summary>
         public static ConfigEntry<string> ApiUrl { get; private set; } = null!;
-        /// <summary>Model name to use for translation.</summary>
+        
+        /// <summary>
+        /// Model name to use for AI translation.
+        /// </summary>
         public static ConfigEntry<string> Model { get; private set; } = null!;
-        /// <summary>Extra prompt appended to every translation request.</summary>
+        
+        /// <summary>
+        /// Extra prompt appended to every translation request.
+        /// </summary>
         public static ConfigEntry<string> ExtraPrompt { get; private set; } = null!;
-        public static ConfigEntry<bool> UseGoogleFallback { get; private set; } = null!;
+        
+        /// <summary>
+        /// Manual override for the room's spoken language.
+        /// "Auto" uses the host's Keywords setting.
+        /// Set to "SChinese", "English", etc. if the Keywords don't match the actual spoken language.
+        /// </summary>
+        public static ConfigEntry<string> RoomLanguage { get; private set; } = null!;
+        
+        /// <summary>
+        /// If true, your own chat bubble shows translated text. If false, shows your original typed text.
+        /// </summary>
+        public static ConfigEntry<bool> TranslateOwnBubbles { get; private set; } = null!;
+        
+        /// <summary>
+        /// Set once in Load(). True = use AI API, False = use Google Translate. Never changes at runtime.
+        /// </summary>
+        public static bool UseAI { get; private set; }
         public static bool IsPaused { get; private set; }
         public static event Action<bool>? OnPauseChanged;
 
@@ -34,19 +61,19 @@ namespace TranslateUs
         public override void Load()
         {
             Logger = BepInEx.Logging.Logger.CreateLogSource("TranslateUs");
-            Logger.LogInfo("=== Loading Translate Us ===");
+            Logger.LogInfo("=== Loading Translate Us v1.2.0 ===");
 
             ApiKey = Config.Bind(
                 "AI",
                 "ApiKey",
-                "0",
-                "API Key. Get one from your translation service provider.");
+                "",
+                "API Key for AI translation. Leave empty to use free Google Translate instead.");
 
             ApiUrl = Config.Bind(
                 "AI",
                 "ApiUrl",
                 "https://open.bigmodel.cn/api/paas/v4/chat/completions",
-                "API endpoint URL. Default is Zhipu AI (智谱) GLM-4-Flash.");
+                "API endpoint URL (OpenAI-compatible). Default is Zhipu AI (智谱) GLM-4-Flash.");
 
             Model = Config.Bind(
                 "AI",
@@ -61,14 +88,27 @@ namespace TranslateUs
                 "Extra instructions appended to the translation prompt. " +
                 "Use this to fine-tune translation behavior (e.g. 'Use informal tone', 'Keep names untranslated').");
 
-            UseGoogleFallback = Config.Bind(
-                "AI", "UseGoogleFallback", true,
-                "When true, falls back to free Google Translate if the AI API is unconfigured or fails. " +
-                "Set to false to disable Google Translate entirely (useful if Google is blocked in your region).");
+            RoomLanguage = Config.Bind(
+                "Translation",
+                "RoomLanguage",
+                "Auto",
+                "Override the room's spoken language. 'Auto' uses the host's Keywords setting. " +
+                "Set to a language name if Keywords are wrong (e.g. 'SChinese', 'English', 'Japanese').");
+
+            TranslateOwnBubbles = Config.Bind(
+                "Translation",
+                "TranslateOwnBubbles",
+                false,
+                "If true, your own chat bubble shows translated text. If false (default), shows your original typed text.");
+
+            UseAI = !string.IsNullOrWhiteSpace(ApiKey.Value) && ApiKey.Value != "0";
+            Logger.LogInfo(UseAI
+                ? $"TranslateUs: Using AI translation (Model: {Model.Value})"
+                : "TranslateUs: Using Google Translate (no API key configured)");
 
             Harmony = new Harmony("ume.transalte.us");
             Harmony.PatchAll();
-            Logger.LogInfo("=== Loaded Translate Us ===");
+            Logger.LogInfo("=== Loaded Translate Us v1.2.0 ===");
         }
     }
 }

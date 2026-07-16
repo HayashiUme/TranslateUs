@@ -7,7 +7,8 @@ namespace TranslateUs.Core
         public PlayerControl SourcePlayer { get; }
         public ChatBubble? Bubble { get; }
         public bool IsTranslated { get; private set; }
-        
+        public bool IsLocalPlayer { get; }
+
         public static Dictionary<ChatBubble, MessageGroup> BubbleGroups { get; } = new();
         public static (string original, string translated)? PendingSend { get; set; }
 
@@ -18,18 +19,7 @@ namespace TranslateUs.Core
             SourcePlayer = sourcePlayer;
             Bubble = bubble;
             IsTranslated = false;
-
-            if (bubble != null)
-                BubbleGroups[bubble] = this;
-        }
-
-        public MessageGroup(string original, string translated, PlayerControl sourcePlayer, ChatBubble? bubble = null)
-        {
-            OriginalMessage = original;
-            TranslatedMessage = translated;
-            SourcePlayer = sourcePlayer;
-            Bubble = bubble;
-            IsTranslated = true;
+            IsLocalPlayer = sourcePlayer == PlayerControl.LocalPlayer;
 
             if (bubble != null)
                 BubbleGroups[bubble] = this;
@@ -46,15 +36,15 @@ namespace TranslateUs.Core
             if (Bubble == null || !IsTranslated)
                 return false;
 
-            bool showOriginal = Bubble.TextArea.text != TranslatedMessage;
-            Bubble.SetText(showOriginal ? OriginalMessage : TranslatedMessage);
+            bool currentlyShowingOriginal = Bubble.TextArea.text == OriginalMessage;
+            Bubble.SetText(currentlyShowingOriginal ? TranslatedMessage : OriginalMessage);
             Bubble.AlignChildren();
 
             var chat = DestroyableSingleton<HudManager>.Instance?.Chat;
             if (chat != null)
                 HarmonyLib.Traverse.Create(chat).Method("AlignAllBubbles").GetValue();
 
-            return showOriginal;
+            return !currentlyShowingOriginal;
         }
 
         public static MessageGroup? FindByBubble(ChatBubble bubble)

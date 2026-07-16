@@ -8,7 +8,8 @@ namespace TranslateUs.Patches
     {
         public static void Prefix(ChatBubble __instance)
         {
-            MessageGroup.RemoveBubble(__instance);
+            if (__instance != null)
+                MessageGroup.RemoveBubble(__instance);
         }
     }
 }

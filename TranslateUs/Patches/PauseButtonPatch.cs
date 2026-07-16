@@ -1,5 +1,6 @@
 using HarmonyLib;
 using UnityEngine;
+using UnityEngine.Events;
 using TranslateUs.Resources;
 
 namespace TranslateUs.Patches
@@ -9,45 +10,52 @@ namespace TranslateUs.Patches
     {
         private static Sprite? _pauseSprite;
         private static Sprite? _resumeSprite;
-        private static SpriteRenderer? _buttonRenderer;
         private static GameObject? _pauseButton;
 
         public static void Postfix(ChatController __instance)
         {
-            if (_pauseButton != null) return;
+            if (_pauseButton != null && _pauseButton)
+                return;
 
             var source = __instance.openKeyboardButton;
-
             if (source == null) return;
 
             _pauseButton = UnityEngine.Object.Instantiate(source.gameObject, source.transform.parent);
             _pauseButton.name = "TranslatePauseButton";
 
             var localPos = _pauseButton.transform.localPosition;
-            _pauseButton.transform.localPosition = new Vector3(localPos.x - 0.7f, localPos.y, localPos.z);
+            _pauseButton.transform.localPosition = new Vector3(-3.9f, -2.7f, localPos.z);
 
-            _pauseSprite = ResourcesUtils.LoadSpriteFromAssembly("Stop.png");
-            _resumeSprite = ResourcesUtils.LoadSpriteFromAssembly("Resume.png");
+            _pauseSprite = ResourcesUtils.LoadSpriteFromAssembly("Stop.png",50f);
+            _resumeSprite = ResourcesUtils.LoadSpriteFromAssembly("Resume.png",50f);
 
             var passive = _pauseButton.GetComponent<PassiveButton>();
             if (passive != null)
             {
                 passive.OnClick.RemoveAllListeners();
-                passive.OnClick.AddListener(new System.Action(Main.TogglePause));
+                passive.OnClick.AddListener((UnityAction)Main.TogglePause);
             }
 
-            _buttonRenderer = _pauseButton.GetComponentInChildren<SpriteRenderer>();
-
             Main.OnPauseChanged += OnPauseChanged;
-            OnPauseChanged(Main.IsPaused);
+            SetButtonSprite(Main.IsPaused);
         }
 
         private static void OnPauseChanged(bool isPaused)
         {
-            if (_buttonRenderer == null) return;
+            SetButtonSprite(isPaused);
+        }
+        
+        private static void SetButtonSprite(bool isPaused)
+        {
+            if (_pauseButton == null || !_pauseButton) return;
+
             var sprite = isPaused ? _resumeSprite : _pauseSprite;
-            if (sprite != null)
-                _buttonRenderer.sprite = sprite;
+            if (sprite == null) return;
+
+            foreach (var sr in _pauseButton.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                sr.sprite = sprite;
+            }
         }
     }
 }

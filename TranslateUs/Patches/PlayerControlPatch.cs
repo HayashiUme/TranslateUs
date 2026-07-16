@@ -29,28 +29,41 @@ namespace TranslateUs.Patches
 
         private static IEnumerator TranslateAndSendCoroutine(PlayerControl player, string originalText)
         {
-            var task = Translator.Translate(originalText, player, forSending: true);
+            var roomLang = LanguageDetector.ResolveRoomLanguage();
+            var task = Translator.TranslateToRoomLanguage(originalText, roomLang);
 
             while (!task.IsCompleted)
                 yield return null;
 
-            string textToSend;
-            if (task.IsCompletedSuccessfully && task.Result.translated != task.Result.original)
-            {
-                MessageGroup.PendingSend = (task.Result.original, task.Result.translated);
-                textToSend = task.Result.translated;
-                Main.Logger.LogInfo(
-                    $"TranslateUs: [Send] \"{originalText}\" → \"{textToSend}\"");
-            }
-            else
-            {
-                if (!task.IsCompletedSuccessfully)
-                    Main.Logger.LogWarning($"TranslateUs: [Send] Failed for \"{originalText}\"");
-                textToSend = originalText;
-            }
+            string textToSend = originalText;
 
-            player.RpcSendChat(textToSend);
-            _isSendingTranslated = false;
+            try
+            {
+                if (task.IsCompletedSuccessfully
+                    && !string.IsNullOrWhiteSpace(task.Result.translated)
+                    && task.Result.translated != originalText)
+                {
+                    MessageGroup.PendingSend = (originalText, task.Result.translated);
+                    textToSend = task.Result.translated;
+                    Main.Logger.LogInfo(
+                        $"TranslateUs: [Send] \"{originalText}\" → \"{textToSend}\"");
+                }
+                else if (task.IsFaulted)
+                {
+                    Main.Logger.LogWarning(
+                        $"TranslateUs: [Send] Translation faulted for \"{originalText}\": " +
+                        $"{task.Exception?.InnerException?.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Main.Logger.LogError($"TranslateUs: [Send] Unexpected error: {ex.Message}");
+            }
+            finally
+            {
+                player.RpcSendChat(textToSend);
+                _isSendingTranslated = false;
+            }
         }
     }
 }

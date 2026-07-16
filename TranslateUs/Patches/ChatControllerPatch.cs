@@ -1,4 +1,5 @@
 using System.Collections;
+using AmongUs.Data;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using HarmonyLib;
 using TranslateUs.Core;
@@ -22,38 +23,55 @@ namespace TranslateUs.Patches
                 var pending = MessageGroup.PendingSend;
                 if (pending != null)
                 {
-                    new MessageGroup(pending.Value.original, pending.Value.translated, sourcePlayer, bubble);
-                    Main.Logger.LogInfo($"TranslateUs: [AddChat] Self: \"{pending.Value.original}\" → \"{pending.Value.translated}\"");
+                    var group = new MessageGroup(pending.Value.original, sourcePlayer, bubble);
+                    group.CompleteTranslation(pending.Value.translated);
+
+                    if (!Main.TranslateOwnBubbles.Value)
+                    {
+                        bubble.SetText(pending.Value.original);
+                        bubble.AlignChildren();
+                        Traverse.Create(__instance).Method("AlignAllBubbles").GetValue();
+                    }
+
+                    Main.Logger.LogInfo($"TranslateUs: [AddChat-Self] \"{pending.Value.original}\" → \"{pending.Value.translated}\"");
                     MessageGroup.PendingSend = null;
+                }
+                else
+                {
+                    new MessageGroup(chatText, sourcePlayer, bubble);
                 }
             }
             else
             {
-                string original = chatText;
-                Main.Logger.LogInfo($"TranslateUs: [AddChat] Received: \"{original}\"");
-                __instance.StartCoroutine(TranslateAndUpdate(__instance, bubble, original, sourcePlayer).WrapToIl2Cpp());
+                var group = new MessageGroup(chatText, sourcePlayer, bubble);
+                Main.Logger.LogInfo($"TranslateUs: [AddChat-Other] Received: \"{chatText}\"");
+                __instance.StartCoroutine(
+                    TranslateAndUpdateCoroutine(__instance, group).WrapToIl2Cpp());
             }
         }
 
-        private static IEnumerator TranslateAndUpdate(
-            ChatController chat, ChatBubble bubble, string original, PlayerControl sourcePlayer)
+        private static IEnumerator TranslateAndUpdateCoroutine(ChatController chat, MessageGroup group)
         {
-            var task = Translator.Translate(original, sourcePlayer, forSending: false);
+            var myLang = DataManager.Settings.Language.CurrentLanguage;
+            var task = Translator.TranslateToMyLanguage(group.OriginalMessage, myLang);
             while (!task.IsCompleted) yield return null;
 
-            if (!task.IsCompletedSuccessfully || task.Result.translated == original)
-                yield break;
+            if (task.IsFaulted) yield break;
+            if (task.Result.translated == group.OriginalMessage) yield break;
 
             string translated = task.Result.translated;
-            Main.Logger.LogInfo($"TranslateUs: [AddChat] \"{original}\" → \"{translated}\"");
+            Main.Logger.LogInfo($"TranslateUs: [AddChat-Other] \"{group.OriginalMessage}\" → \"{translated}\"");
 
-            new MessageGroup(original, translated, sourcePlayer, bubble);
-            bubble.SetText(translated);
-            bubble.AlignChildren();
-            Traverse.Create(chat).Method("AlignAllBubbles").GetValue();
+            group.CompleteTranslation(translated);
+            if (group.Bubble != null)
+            {
+                group.Bubble.SetText(translated);
+                group.Bubble.AlignChildren();
+                Traverse.Create(chat).Method("AlignAllBubbles").GetValue();
+            }
         }
     }
-
+    
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Toggle))]
     public class ChatControllerTogglePatch
     {
@@ -64,42 +82,52 @@ namespace TranslateUs.Patches
             var scroller = __instance.GetComponentInChildren<Scroller>(true);
             if (scroller?.Inner == null) return;
 
-            var pairs = new List<(ChatBubble bubble, MessageGroup group, string original)>();
+            var toTranslate = new List<(ChatBubble bubble, MessageGroup group)>();
+
             for (int i = 0; i < scroller.Inner.childCount; i++)
             {
                 var bubble = scroller.Inner.GetChild(i).GetComponent<ChatBubble>();
                 if (bubble == null) continue;
 
                 var group = MessageGroup.FindByBubble(bubble);
-                if (group == null || group.IsTranslated) continue;
-
-                pairs.Add((bubble, group, group.OriginalMessage));
+                if (group == null)
+                {
+                    group = new MessageGroup(bubble.TextArea.text, null!, bubble);
+                    Main.Logger.LogInfo($"TranslateUs: [Toggle] Registered orphan: \"{group.OriginalMessage}\"");
+                }
+                
+                if (!group.IsTranslated && !group.IsLocalPlayer)
+                {
+                    toTranslate.Add((bubble, group));
+                }
             }
 
-            if (pairs.Count == 0) return;
+            if (toTranslate.Count == 0) return;
 
-            Main.Logger.LogInfo($"TranslateUs: [Toggle] Batch translating {pairs.Count} messages");
-            __instance.StartCoroutine(BatchTranslate(__instance, pairs).WrapToIl2Cpp());
+            Main.Logger.LogInfo($"TranslateUs: [Toggle] Batch translating {toTranslate.Count} messages");
+            __instance.StartCoroutine(
+                ToggleBatchTranslateCoroutine(__instance, toTranslate).WrapToIl2Cpp());
         }
 
-        private static IEnumerator BatchTranslate(
-            ChatController chat, List<(ChatBubble, MessageGroup, string)> pairs)
+        private static IEnumerator ToggleBatchTranslateCoroutine(
+            ChatController chat, List<(ChatBubble bubble, MessageGroup group)> pairs)
         {
-            var messages = pairs.ConvertAll(p => p.Item3);
-            var task = Translator.BatchTranslate(messages, forSending: false);
+            var myLang = DataManager.Settings.Language.CurrentLanguage;
+            var messages = pairs.ConvertAll(p => p.group.OriginalMessage);
+            var task = Translator.BatchTranslateToMyLanguage(messages, myLang);
             while (!task.IsCompleted) yield return null;
 
-            if (!task.IsCompletedSuccessfully) yield break;
+            if (task.IsFaulted) yield break;
 
             var results = task.Result;
             bool any = false;
             for (int i = 0; i < pairs.Count; i++)
             {
-                var (bubble, group, original) = pairs[i];
+                var (bubble, group) = pairs[i];
                 string translated = results[i].translated;
-                if (translated == original) continue;
+                if (translated == group.OriginalMessage) continue;
 
-                Main.Logger.LogInfo($"TranslateUs: [Toggle] \"{original}\" → \"{translated}\"");
+                Main.Logger.LogInfo($"TranslateUs: [Toggle] \"{group.OriginalMessage}\" → \"{translated}\"");
                 group.CompleteTranslation(translated);
                 bubble.SetText(translated);
                 bubble.AlignChildren();
@@ -109,7 +137,7 @@ namespace TranslateUs.Patches
                 Traverse.Create(chat).Method("AlignAllBubbles").GetValue();
         }
     }
-
+    
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerRightClickPatch
     {
@@ -134,33 +162,44 @@ namespace TranslateUs.Patches
                 if (!bubble.Background.bounds.Contains(pos)) continue;
 
                 var group = MessageGroup.FindByBubble(bubble);
-                if (group == null) break;
+                if (group == null)
+                {
+                    group = new MessageGroup(bubble.TextArea.text, null!, bubble);
+                    Main.Logger.LogInfo($"TranslateUs: [RC] Registered orphan for translation");
+                }
 
                 if (!group.IsTranslated)
                 {
                     Main.Logger.LogInfo($"TranslateUs: [RC] Translating: \"{group.OriginalMessage}\"");
-                    hud.StartCoroutine(TranslateOne(hud.Chat, bubble, group).WrapToIl2Cpp());
+                    hud.StartCoroutine(
+                        RightClickTranslateCoroutine(hud.Chat, group).WrapToIl2Cpp());
                 }
                 else
                 {
-                    bool showOrig = group.Toggle();
-                    Main.Logger.LogInfo($"TranslateUs: [RC] → {(showOrig ? "Original" : "Translated")}");
+                    bool showingOriginal = group.Toggle();
+                    Main.Logger.LogInfo($"TranslateUs: [RC] Toggled → {(showingOriginal ? "Original" : "Translated")}");
                 }
                 break;
             }
         }
 
-        private static IEnumerator TranslateOne(ChatController chat, ChatBubble bubble, MessageGroup group)
+        private static IEnumerator RightClickTranslateCoroutine(ChatController chat, MessageGroup group)
         {
-            var task = Translator.Translate(group.OriginalMessage, null!, forSending: false);
+            var myLang = DataManager.Settings.Language.CurrentLanguage;
+            var task = Translator.TranslateToMyLanguage(group.OriginalMessage, myLang);
             while (!task.IsCompleted) yield return null;
-            if (!task.IsCompletedSuccessfully || task.Result.translated == group.OriginalMessage) yield break;
+
+            if (task.IsFaulted) yield break;
+            if (task.Result.translated == group.OriginalMessage) yield break;
 
             Main.Logger.LogInfo($"TranslateUs: [RC] \"{group.OriginalMessage}\" → \"{task.Result.translated}\"");
             group.CompleteTranslation(task.Result.translated);
-            bubble.SetText(task.Result.translated);
-            bubble.AlignChildren();
-            Traverse.Create(chat).Method("AlignAllBubbles").GetValue();
+            if (group.Bubble != null)
+            {
+                group.Bubble.SetText(task.Result.translated);
+                group.Bubble.AlignChildren();
+                Traverse.Create(chat).Method("AlignAllBubbles").GetValue();
+            }
         }
     }
 }
