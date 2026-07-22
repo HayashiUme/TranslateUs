@@ -53,7 +53,8 @@ namespace TranslateUs.Patches
         private static IEnumerator TranslateAndUpdateCoroutine(ChatController chat, MessageGroup group)
         {
             var myLang = DataManager.Settings.Language.CurrentLanguage;
-            var task = Translator.TranslateToMyLanguage(group.OriginalMessage, myLang);
+            var roomLang = LanguageDetector.ResolveRoomLanguage();
+            var task = Translator.TranslateToMyLanguage(group.OriginalMessage, myLang, roomLang);
             while (!task.IsCompleted) yield return null;
 
             if (task.IsFaulted) yield break;
@@ -113,8 +114,9 @@ namespace TranslateUs.Patches
             ChatController chat, List<(ChatBubble bubble, MessageGroup group)> pairs)
         {
             var myLang = DataManager.Settings.Language.CurrentLanguage;
+            var roomLang = LanguageDetector.ResolveRoomLanguage();
             var messages = pairs.ConvertAll(p => p.group.OriginalMessage);
-            var task = Translator.BatchTranslateToMyLanguage(messages, myLang);
+            var task = Translator.BatchTranslateToMyLanguage(messages, myLang, roomLang);
             while (!task.IsCompleted) yield return null;
 
             if (task.IsFaulted) yield break;
@@ -186,7 +188,8 @@ namespace TranslateUs.Patches
         private static IEnumerator RightClickTranslateCoroutine(ChatController chat, MessageGroup group)
         {
             var myLang = DataManager.Settings.Language.CurrentLanguage;
-            var task = Translator.TranslateToMyLanguage(group.OriginalMessage, myLang);
+            var roomLang = LanguageDetector.ResolveRoomLanguage();
+            var task = Translator.TranslateToMyLanguage(group.OriginalMessage, myLang, roomLang);
             while (!task.IsCompleted) yield return null;
 
             if (task.IsFaulted) yield break;

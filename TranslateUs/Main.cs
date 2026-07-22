@@ -51,6 +51,7 @@ namespace TranslateUs
         public static bool UseAI { get; private set; }
         public static bool IsPaused { get; private set; }
         public static event Action<bool>? OnPauseChanged;
+        public static bool IsAuthFix;
 
         public static void TogglePause()
         {
@@ -102,11 +103,12 @@ namespace TranslateUs
                 false,
                 "If true, your own chat bubble shows translated text. If false (default), shows your original typed text.");
 
-            // For publish on Starlight, now disable using AI translation for Starlight ~~(not Android)~~ Players, ~~if you use a Google-fix version of FusionCore play TranslateUs is okay~~
-            bool isAndroid = Application.platform == RuntimePlatform.Android;
-            UseAI = !isAndroid && !string.IsNullOrWhiteSpace(ApiKey.Value) && ApiKey.Value != "0";
+            // For publish on Starlight, now disable using AI translation for Starlight (not Android) Players
+            // if you use a Google-fix version of FusionCore play TranslateUs is okay
+            bool isStarlight = OperatingSystem.IsAndroid() && IsAuthFix;
+            UseAI = !isStarlight && !string.IsNullOrWhiteSpace(ApiKey.Value) && ApiKey.Value != "0";
 
-            if (isAndroid)
+            if (isStarlight)
                 Logger.LogInfo("Starlight detected — AI translation disabled, using Google Translate only.");
             else
                 Logger.LogInfo(UseAI

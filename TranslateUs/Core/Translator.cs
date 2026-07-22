@@ -8,28 +8,34 @@ namespace TranslateUs.Core;
 public class Translator
 {
     #region Public API
-    
+
     public static async Task<(string original, string translated)> TranslateToRoomLanguage(
         string text, SupportedLangs roomLang)
-        => await TranslateInternal(text, roomLang);
-    
+    {
+        var myLang = DataManager.Settings.Language.CurrentLanguage;
+        return await TranslateInternal(text, myLang, roomLang);
+    }
+
     public static async Task<(string original, string translated)> TranslateToMyLanguage(
-        string text, SupportedLangs myLang)
-        => await TranslateInternal(text, myLang);
-    
+        string text, SupportedLangs myLang, SupportedLangs roomLang)
+    {
+        return await TranslateInternal(text, roomLang, myLang);
+    }
+
     public static async Task<List<(string original, string translated)>> BatchTranslateToMyLanguage(
-        List<string> messages, SupportedLangs myLang)
-        => await BatchTranslateInternal(messages, myLang);
+        List<string> messages, SupportedLangs myLang, SupportedLangs roomLang)
+        => await BatchTranslateInternal(messages, roomLang, myLang);
 
     #endregion
 
     #region Internal translation dispatch
 
     private static async Task<(string original, string translated)> TranslateInternal(
-        string originalMessage, SupportedLangs targetLang)
+        string originalMessage, SupportedLangs sourceLang, SupportedLangs targetLang)
     {
-        string diagTargetLang = GetClientLanguageName(targetLang);
-        Main.Logger.LogInfo($"[DIAG] Translate: TargetLang={diagTargetLang}, UseAI={Main.UseAI}, IsPaused={Main.IsPaused}, Input=\"{originalMessage}\"");
+        string diagSource = GetClientLanguageName(sourceLang);
+        string diagTarget = GetClientLanguageName(targetLang);
+        Main.Logger.LogInfo($"[DIAG] Translate: {diagSource}→{diagTarget}, UseAI={Main.UseAI}, IsPaused={Main.IsPaused}, Input=\"{originalMessage}\"");
 
         if (Main.IsPaused)
             return (originalMessage, originalMessage);
@@ -38,7 +44,7 @@ public class Translator
         {
             try
             {
-                string result = await TranslateViaAI(originalMessage, targetLang);
+                string result = await TranslateViaAI(originalMessage, sourceLang, targetLang);
                 return (originalMessage, result);
             }
             catch (Exception ex)
@@ -63,19 +69,20 @@ public class Translator
     }
 
     private static async Task<List<(string original, string translated)>> BatchTranslateInternal(
-        List<string> messages, SupportedLangs targetLang)
+        List<string> messages, SupportedLangs sourceLang, SupportedLangs targetLang)
     {
         if (messages.Count == 0)
             return new List<(string, string)>();
 
-        string diagTargetLang = GetClientLanguageName(targetLang);
-        Main.Logger.LogInfo($"[DIAG] BatchTranslate: TargetLang={diagTargetLang}, Count={messages.Count}, UseAI={Main.UseAI}");
+        string diagSource = GetClientLanguageName(sourceLang);
+        string diagTarget = GetClientLanguageName(targetLang);
+        Main.Logger.LogInfo($"[DIAG] BatchTranslate: {diagSource}→{diagTarget}, Count={messages.Count}, UseAI={Main.UseAI}");
 
         if (Main.UseAI)
         {
             try
             {
-                return await BatchTranslateViaAI(messages, targetLang);
+                return await BatchTranslateViaAI(messages, sourceLang, targetLang);
             }
             catch (Exception ex)
             {
@@ -101,17 +108,20 @@ public class Translator
 
     #region AI Translation
 
-    /// <summary>Get the pre-baked XML terminology guide for a target language.</summary>
-    private static string? GetTerminologyGuide(SupportedLangs targetLang)
+    /// <summary>Get pre-baked XML terminology guides for both source and target languages.</summary>
+    private static (string? sourceGuide, string? targetGuide) GetTerminologyGuides(
+        SupportedLangs sourceLang, SupportedLangs targetLang)
     {
-        return SlangCache.Get(targetLang);
+        return (SlangCache.Get(sourceLang), SlangCache.Get(targetLang));
     }
 
-    private static async Task<string> TranslateViaAI(string text, SupportedLangs targetLang)
+    private static async Task<string> TranslateViaAI(
+        string text, SupportedLangs sourceLang, SupportedLangs targetLang)
     {
+        string sourceLanguage = GetClientLanguageName(sourceLang);
         string targetLanguage = GetClientLanguageName(targetLang);
-        string? guide = GetTerminologyGuide(targetLang);
-        string prompt = PromptBuilder.BuildSinglePrompt(text, targetLanguage, guide);
+        var (sourceGuide, targetGuide) = GetTerminologyGuides(sourceLang, targetLang);
+        string prompt = PromptBuilder.BuildSinglePrompt(text, sourceLanguage, targetLanguage, sourceGuide, targetGuide);
         var payload = new
         {
             model = Main.Model.Value,
@@ -124,11 +134,12 @@ public class Translator
     }
 
     private static async Task<List<(string original, string translated)>> BatchTranslateViaAI(
-        List<string> messages, SupportedLangs targetLang)
+        List<string> messages, SupportedLangs sourceLang, SupportedLangs targetLang)
     {
+        string sourceLanguage = GetClientLanguageName(sourceLang);
         string targetLanguage = GetClientLanguageName(targetLang);
-        string? guide = GetTerminologyGuide(targetLang);
-        string prompt = PromptBuilder.BuildBatchPrompt(messages, targetLanguage, guide);
+        var (sourceGuide, targetGuide) = GetTerminologyGuides(sourceLang, targetLang);
+        string prompt = PromptBuilder.BuildBatchPrompt(messages, sourceLanguage, targetLanguage, sourceGuide, targetGuide);
         var payload = new
         {
             model = Main.Model.Value,
