@@ -63,7 +63,7 @@ namespace TranslateUs
         public override void Load()
         {
             Logger = BepInEx.Logging.Logger.CreateLogSource("TranslateUs");
-            Logger.LogInfo("=== Loading Translate Us v1.2.0 ===");
+            Logger.LogInfo("=== Loading Translate Us v1.2.1 ===");
 
             ApiKey = Config.Bind(
                 "AI",
