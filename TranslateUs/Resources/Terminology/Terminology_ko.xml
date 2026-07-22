@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="ko" language="Korean">
+  <category name="roles">
+    <term en="impostor" local="임포스터" />
+    <term en="crewmate" local="크루원" />
+    <term en="shapeshifter" local="형상 변환자" />
+    <term en="engineer" local="기술자" />
+    <term en="scientist" local="과학자" />
+    <term en="guardian angel" local="수호천사" />
+    <term en="phantom" local="팬텀" />
+    <term en="tracker" local="추적자" />
+    <term en="noisemaker" local="노이즈 메이커" />
+    <term en="detective" local="탐정" />
+    <term en="viper" local="바이퍼" />
+    <term en="ghost" local="유령" />
+    <term en="seeker" local="시커" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="벤트 / 환풍구" />
+    <term en="report" local="리포트 / 시체신고" />
+    <term en="sabotage" local="사보타지 / 방해 공작" />
+    <term en="kill" local="킬" />
+    <term en="vote" local="투표" />
+    <term en="skip" local="스킵" />
+    <term en="self-report" local="자리폿" />
+    <term en="camp" local="캠핑" />
+    <term en="clear" local="클리어" />
+    <term en="stack" local="스택" />
+    <term en="scan" local="스캔" />
+    <term en="door" local="문 잠금" />
+    <term en="lights" local="정전" />
+    <term en="comms" local="통신장치 파괴" />
+    <term en="o2" local="산소 고갈" />
+    <term en="reactor" local="원자로 용해" />
+    <term en="meeting" local="긴급회의" />
+    <term en="emergency" local="이머전시" />
+    <term en="body" local="시체" />
+    <term en="task" local="미션 / 임무" />
+    <term en="eject" local="방출 / 퇴출" />
+    <term en="cooldown" local="쿨타임" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="관리실" />
+    <term en="cafeteria" local="식당" />
+    <term en="communications" local="통신실" />
+    <term en="electrical" local="전기실" />
+    <term en="upper engine" local="상부 엔진" />
+    <term en="lower engine" local="하부 엔진" />
+    <term en="medbay" local="의무실" />
+    <term en="navigation" local="항법실 / 내비" />
+    <term en="o2 room" local="산소실" />
+    <term en="reactor room" local="원자로" />
+    <term en="security" local="보안실 / 카메라" />
+    <term en="shields" local="보호막실" />
+    <term en="storage" local="창고" />
+    <term en="weapons" local="무기실" />
+    <term en="hallway" local="복도" />
+    <term en="vitals" local="바이탈" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="서스" />
+    <term en="afk" local="잠수 / AFK" />
+    <term en="gg" local="GG / ㅅㄱ" />
+    <term en="gl" local="GL / 파이팅" />
+    <term en="ty" local="ㄱㅅ / ㅌㅋ" />
+    <term en="thx" local="ㄱㅅ (감사)" />
+    <term en="np" local="ㄴㅍ / ㅇㅇㅇ" />
+    <term en="lol" local="ㅋㅋ" />
+    <term en="lmao" local="ㅋㅋㅋㅋㅋ / 개웃겨" />
+    <term en="xd" local="XD / ㅋㅋ" />
+    <term en="wtf" local="ㅁㅊ (미친)" />
+    <term en="brb" local="잠깐 / BRB" />
+    <term en="idk" local="몰라 / 글쎄" />
+    <term en="nvm" local="ㄴㄴ / 아니다" />
+    <term en="tbf" local="솔직히" />
+    <term en="imo" local="내 생각엔" />
+    <term en="tbh" local="솔까" />
+    <term en="rdm" local="랜덤킬 / 랜덤 퇴출" />
+    <term en="cap" local="거짓말 / 구라" />
+    <term en="self" local="자리폿" />
+    <term en="imp" local="임포" />
+    <term en="crew" local="크루" />
+    <!-- Korean community-specific slang -->
+    <term en="mark (vote for)" local="찍다" />
+    <term en="caught!" local="찰칵" />
+    <term en="emergency meeting (short)" local="급회" />
+    <term en="hard carry" local="하드캐리" />
+    <term en="unfair accusation" local="억까" />
+    <term en="muddying waters" local="물타기" />
+    <term en="desertion (rage quit)" local="탈주" />
+    <term en="body farming" local="시체팜" />
+    <term en="crewsona" local="크루소나" />
+    <term en="noob" local="허접 / 뉴비" />
+    <term en="ok" local="ㅇㅋ / 오케이" />
+    <term en="sorry" local="ㅈㅅ (죄송)" />
+  </category>
+</terminology>

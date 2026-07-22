@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="en" language="English">
+  <category name="roles">
+    <term en="impostor" local="impostor" />
+    <term en="crewmate" local="crewmate" />
+    <term en="shapeshifter" local="shapeshifter" />
+    <term en="engineer" local="engineer" />
+    <term en="scientist" local="scientist" />
+    <term en="guardian angel" local="guardian angel" />
+    <term en="phantom" local="phantom" />
+    <term en="tracker" local="tracker" />
+    <term en="noisemaker" local="noisemaker" />
+    <term en="detective" local="detective" />
+    <term en="viper" local="viper" />
+    <term en="ghost" local="ghost" />
+    <term en="seeker" local="seeker" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="vent" />
+    <term en="report" local="report" />
+    <term en="sabotage" local="sabotage" />
+    <term en="kill" local="kill" />
+    <term en="vote" local="vote" />
+    <term en="skip" local="skip" />
+    <term en="self-report" local="self-report" />
+    <term en="camp" local="camp" />
+    <term en="clear" local="clear" />
+    <term en="stack" local="stack" />
+    <term en="scan" local="scan" />
+    <term en="door" local="door" />
+    <term en="lights" local="lights" />
+    <term en="comms" local="comms" />
+    <term en="o2" local="O2" />
+    <term en="reactor" local="reactor" />
+    <term en="meeting" local="meeting" />
+    <term en="emergency" local="emergency" />
+    <term en="body" local="body" />
+    <term en="task" local="task" />
+    <term en="eject" local="eject" />
+    <term en="cooldown" local="cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="Admin" />
+    <term en="cafeteria" local="Cafeteria" />
+    <term en="communications" local="Communications" />
+    <term en="electrical" local="Electrical" />
+    <term en="upper engine" local="Upper Engine" />
+    <term en="lower engine" local="Lower Engine" />
+    <term en="medbay" local="MedBay" />
+    <term en="navigation" local="Navigation" />
+    <term en="o2 room" local="O2" />
+    <term en="reactor room" local="Reactor" />
+    <term en="security" local="Security" />
+    <term en="shields" local="Shields" />
+    <term en="storage" local="Storage" />
+    <term en="weapons" local="Weapons" />
+    <term en="hallway" local="Hallway" />
+    <term en="vitals" local="Vitals" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus (suspicious)" />
+    <term en="afk" local="afk (away from keyboard)" />
+    <term en="gg" local="gg (good game)" />
+    <term en="gl" local="gl (good luck)" />
+    <term en="ty" local="ty (thank you)" />
+    <term en="thx" local="thx (thanks)" />
+    <term en="np" local="np (no problem)" />
+    <term en="lol" local="lol (laughing)" />
+    <term en="lmao" local="lmao" />
+    <term en="xd" local="xd" />
+    <term en="wtf" local="wtf" />
+    <term en="brb" local="brb (be right back)" />
+    <term en="idk" local="idk (I don't know)" />
+    <term en="nvm" local="nvm (never mind)" />
+    <term en="tbf" local="tbf (to be fair)" />
+    <term en="imo" local="imo (in my opinion)" />
+    <term en="tbh" local="tbh (to be honest)" />
+    <term en="rdm" local="rdm (random)" />
+    <term en="cap" local="cap (lie)" />
+    <term en="self" local="self (self-report)" />
+    <term en="imp" local="imp (impostor)" />
+    <term en="crew" local="crew (crewmate)" />
+    <term en="cc" local="cc (counter-claim)" />
+    <term en="hard clear" local="hard clear (confirmed innocent)" />
+    <term en="marinate" local="marinate (wait before ejecting)" />
+    <term en="ss" local="ss (shapeshifter)" />
+    <term en="eng" local="eng (engineer)" />
+    <term en="sci" local="sci (scientist)" />
+    <term en="ga" local="ga (guardian angel)" />
+  </category>
+</terminology>

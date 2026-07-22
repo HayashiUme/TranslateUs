@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="pt" language="Portuguese (EU)">
+  <category name="roles">
+    <term en="impostor" local="impostor" />
+    <term en="crewmate" local="tripulante" />
+    <term en="shapeshifter" local="metamorfo / transfigurador" />
+    <term en="engineer" local="engenheiro" />
+    <term en="scientist" local="cientista" />
+    <term en="guardian angel" local="anjo da guarda" />
+    <term en="phantom" local="espectro / fantasma" />
+    <term en="tracker" local="rastreador" />
+    <term en="noisemaker" local="barulhento / alarmista" />
+    <term en="detective" local="detetive" />
+    <term en="viper" local="víbora" />
+    <term en="ghost" local="fantasma" />
+    <term en="seeker" local="procurador" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="ventilação / conduta de ar" />
+    <term en="report" local="reportar / denunciar" />
+    <term en="sabotage" local="sabotagem / sabotar" />
+    <term en="kill" local="matar / assassinar" />
+    <term en="vote" local="votar / votação" />
+    <term en="skip" local="saltar / passar" />
+    <term en="self-report" local="auto-reporte" />
+    <term en="camp" local="acampar / ficar parado" />
+    <term en="clear" local="limpar / inocentar" />
+    <term en="stack" local="empilhar / stackar" />
+    <term en="scan" local="digitalizar / fazer scan" />
+    <term en="door" local="fechar portas" />
+    <term en="lights" local="apagar luzes" />
+    <term en="comms" local="comunicações" />
+    <term en="o2" local="oxigénio / O2" />
+    <term en="reactor" local="reator" />
+    <term en="meeting" local="reunião" />
+    <term en="emergency" local="reunião de emergência" />
+    <term en="body" local="cadáver / corpo" />
+    <term en="task" local="tarefa" />
+    <term en="eject" local="ejetar / expulsar" />
+    <term en="cooldown" local="tempo de recarga / cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="administração" />
+    <term en="cafeteria" local="cafetaria / refeitório" />
+    <term en="communications" local="comunicações" />
+    <term en="electrical" local="elétrico / eletricidade" />
+    <term en="upper engine" local="motor superior" />
+    <term en="lower engine" local="motor inferior" />
+    <term en="medbay" local="enfermaria" />
+    <term en="navigation" local="navegação" />
+    <term en="o2 room" local="oxigénio" />
+    <term en="reactor room" local="reator" />
+    <term en="security" local="segurança / câmaras" />
+    <term en="shields" local="escudos" />
+    <term en="storage" local="armazém" />
+    <term en="weapons" local="arsenal / armas" />
+    <term en="hallway" local="corredor" />
+    <term en="vitals" local="sinais vitais" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus / suspeito" />
+    <term en="afk" local="afk / ausente" />
+    <term en="gg" local="gg / boa / bem jogado" />
+    <term en="gl" local="gl / boa sorte" />
+    <term en="ty" local="obrigado/a / obg" />
+    <term en="thx" local="obg / thx" />
+    <term en="np" local="np / de nada / na boa / tranquilo" />
+    <term en="lol" local="lol / ahah / kkk" />
+    <term en="lmao" local="lmao / lol" />
+    <term en="xd" local="xd" />
+    <term en="wtf" local="wtf / mas que / fdx" />
+    <term en="brb" local="brb / já volto / volto já" />
+    <term en="idk" local="idk / não sei / nsei / sei lá" />
+    <term en="nvm" local="nvm / esquece / deixa" />
+    <term en="tbf" local="tbh / para ser sincero" />
+    <term en="imo" local="imo / na minha opinião" />
+    <term en="tbh" local="tbh / sinceramente" />
+    <term en="rdm" local="rdm / aleatório / à toa" />
+    <term en="cap" local="cap / mentira / treta" />
+    <term en="self" local="self / auto" />
+    <term en="imp" local="imp / impostor" />
+    <term en="crew" local="tripu / trip / crew" />
+    <!-- Portuguese (EU) community-specific slang -->
+    <term en="yeah" local="ya" />
+    <term en="a lot" local="bué" />
+    <term en="cool" local="fixe" />
+    <term en="guy" local="gajo" />
+    <term en="guys/folks" local="malta" />
+    <term en="i am (spoken)" local="tou" />
+    <term en="like (filler)" local="tipo" />
+    <term en="filler word" local="pá" />
+    <term en="let's go" local="bora" />
+    <term en="it wasn't me" local="não fui eu" />
+    <term en="he vented" local="ele fez vent" />
+    <term en="emergency button" local="botão de emergência" />
+    <term en="let's vote" local="bora votar" />
+    <term en="BS/lie" local="treta" />
+    <term en="where's the body?" local="onde está o corpo?" />
+  </category>
+</terminology>

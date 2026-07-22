@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="ja" language="Japanese">
+  <category name="roles">
+    <term en="impostor" local="インポスター" />
+    <term en="crewmate" local="クルーメイト" />
+    <term en="shapeshifter" local="シェイプシフター" />
+    <term en="engineer" local="エンジニア" />
+    <term en="scientist" local="科学者" />
+    <term en="guardian angel" local="守護天使" />
+    <term en="phantom" local="ファントム" />
+    <term en="tracker" local="トラッカー" />
+    <term en="noisemaker" local="ノイズメーカー" />
+    <term en="detective" local="探偵" />
+    <term en="viper" local="バイパー" />
+    <term en="ghost" local="ゴースト / 幽霊" />
+    <term en="seeker" local="シーカー" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="ベント / 通気孔" />
+    <term en="report" local="報告 / 通報" />
+    <term en="sabotage" local="サボタージュ" />
+    <term en="kill" local="キル" />
+    <term en="vote" local="投票" />
+    <term en="skip" local="スキップ" />
+    <term en="self-report" local="自爆報告" />
+    <term en="camp" local="張り付き" />
+    <term en="clear" local="白確定" />
+    <term en="stack" local="スタック / 集合" />
+    <term en="scan" local="スキャン" />
+    <term en="door" local="ドア閉め" />
+    <term en="lights" local="停電" />
+    <term en="comms" local="通信妨害" />
+    <term en="o2" local="酸素低下" />
+    <term en="reactor" local="原子炉異常" />
+    <term en="meeting" local="緊急会議" />
+    <term en="emergency" local="緊急招集" />
+    <term en="body" local="死体" />
+    <term en="task" local="タスク" />
+    <term en="eject" local="追放" />
+    <term en="cooldown" local="クールタイム" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="管理室 / アドミン" />
+    <term en="cafeteria" local="カフェテリア" />
+    <term en="communications" local="通信室" />
+    <term en="electrical" local="電気室" />
+    <term en="upper engine" local="上エンジン" />
+    <term en="lower engine" local="下エンジン" />
+    <term en="medbay" local="医療室" />
+    <term en="navigation" local="ナビゲーション" />
+    <term en="o2 room" local="酸素室" />
+    <term en="reactor room" local="原子炉" />
+    <term en="security" local="セキュリティ / 監視カメラ" />
+    <term en="shields" local="シールド室" />
+    <term en="storage" local="倉庫" />
+    <term en="weapons" local="武器庫" />
+    <term en="hallway" local="通路" />
+    <term en="vitals" local="バイタル" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="サス（怪しい）" />
+    <term en="afk" local="放置 / AFK" />
+    <term en="gg" local="GG / 乙" />
+    <term en="gl" local="グッドラック / GL" />
+    <term en="ty" local="あり" />
+    <term en="thx" local="サンクス / thx" />
+    <term en="np" local="どんまい / NP" />
+    <term en="lol" local="草 / w / www" />
+    <term en="lmao" local="大草原 / 爆笑" />
+    <term en="xd" local="XD / ワロタ" />
+    <term en="wtf" local="は？ / まじか" />
+    <term en="brb" local="ちょい落ち / 離席" />
+    <term en="idk" local="わからん / しらん" />
+    <term en="nvm" local="なんでもない / 気にしないで" />
+    <term en="tbf" local="ぶっちゃけ" />
+    <term en="imo" local="個人的には" />
+    <term en="tbh" local="正直" />
+    <term en="rdm" local="ランダムキル / 無差別" />
+    <term en="cap" local="嘘 / デマ" />
+    <term en="self" local="自爆" />
+    <term en="imp" local="インポス" />
+    <term en="crew" local="クルー" />
+    <term en="hard clear" local="確定白" />
+    <!-- Japanese community-specific slang -->
+    <term en="white (innocent)" local="白" />
+    <term en="black (guilty)" local="黒" />
+    <term en="gray (suspicious)" local="グレー" />
+    <term en="confirmed" local="確定" />
+    <term en="confirmed white" local="白確定" />
+    <term en="line (alibi pair)" local="ライン" />
+    <term en="surround (protect)" local="囲い" />
+    <term en="village (crew)" local="村" />
+    <term en="hang (eject)" local="吊る" />
+    <term en="first move (first kill)" local="初手" />
+    <term en="deception (fake claim)" local="騙り" />
+    <term en="transparent (caught)" local="透け" />
+    <term en="sabo (sabotage short)" local="サボ" />
+    <term en="repo (report short)" local="レポ" />
+    <term en="zako (noob)" local="雑魚" />
+    <term en="space werewolf" local="宇宙人狼" />
+    <term en="that's it!" local="それな" />
+    <term en="inner circle" local="身内" />
+    <term en="OK" local="おけ / おｋ" />
+  </category>
+</terminology>

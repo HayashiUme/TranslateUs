@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="it" language="Italian">
+  <category name="roles">
+    <term en="impostor" local="impostore" />
+    <term en="crewmate" local="astronauta" />
+    <term en="shapeshifter" local="mutaforma" />
+    <term en="engineer" local="ingegnere" />
+    <term en="scientist" local="scienziato" />
+    <term en="guardian angel" local="angelo custode" />
+    <term en="phantom" local="spettro" />
+    <term en="tracker" local="segugio" />
+    <term en="noisemaker" local="starnazzatore" />
+    <term en="detective" local="detective" />
+    <term en="viper" local="cobra" />
+    <term en="ghost" local="fantasma" />
+    <term en="seeker" local="cercatore" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="condotto / presa d'aria" />
+    <term en="report" local="segnalare" />
+    <term en="sabotage" local="sabotaggio / sabotare" />
+    <term en="kill" local="uccidere" />
+    <term en="vote" local="votare / voto" />
+    <term en="skip" local="saltare / astenersi" />
+    <term en="self-report" local="auto-segnalazione" />
+    <term en="camp" local="camperare" />
+    <term en="clear" local="scagionare / pulito" />
+    <term en="stack" local="impilarsi / fare pila" />
+    <term en="scan" local="scansionare / scansione" />
+    <term en="door" local="bloccare le porte" />
+    <term en="lights" local="luci" />
+    <term en="comms" local="comunicazioni" />
+    <term en="o2" local="ossigeno / O2" />
+    <term en="reactor" local="reattore" />
+    <term en="meeting" local="riunione" />
+    <term en="emergency" local="riunione di emergenza" />
+    <term en="body" local="cadavere / corpo" />
+    <term en="task" local="incarico / compito / task" />
+    <term en="eject" local="espellere / espulso" />
+    <term en="cooldown" local="tempo di ricarica / cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="amministrazione" />
+    <term en="cafeteria" local="caffetteria / mensa" />
+    <term en="communications" local="comunicazioni" />
+    <term en="electrical" local="elettrico / elettricità" />
+    <term en="upper engine" local="motore superiore" />
+    <term en="lower engine" local="motore inferiore" />
+    <term en="medbay" local="infermeria" />
+    <term en="navigation" local="navigazione" />
+    <term en="o2 room" local="ossigeno" />
+    <term en="reactor room" local="reattore" />
+    <term en="security" local="sicurezza / telecamere" />
+    <term en="shields" local="scudi" />
+    <term en="storage" local="magazzino / deposito" />
+    <term en="weapons" local="armeria" />
+    <term en="hallway" local="corridoio" />
+    <term en="vitals" local="parametri vitali" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus / sospetto" />
+    <term en="afk" local="afk / assente" />
+    <term en="gg" local="gg / bella" />
+    <term en="gl" local="gl / buona fortuna" />
+    <term en="ty" local="grazie / grz" />
+    <term en="thx" local="grazie / thx / grz" />
+    <term en="np" local="np / di niente / prego / figu" />
+    <term en="lol" local="lol / ahah" />
+    <term en="lmao" local="lmao / ahahah / lol" />
+    <term en="xd" local="xd" />
+    <term en="wtf" local="wtf / ma che / che cazzo" />
+    <term en="brb" local="brb / torno / torno subito" />
+    <term en="idk" local="idk / boh / non so / ns" />
+    <term en="nvm" local="nvm / lascia / non importa" />
+    <term en="tbf" local="tbh" />
+    <term en="imo" local="imo / secondo me" />
+    <term en="tbh" local="tbh / sinceramente / onestamente" />
+    <term en="rdm" local="rdm / a caso / random" />
+    <term en="cap" local="cap / cazzata / bugia" />
+    <term en="self" local="self / auto" />
+    <term en="imp" local="imp / impostore" />
+    <term en="crew" local="crew / astro" />
+    <!-- Italian community-specific slang -->
+    <term en="idk (iconic)" local="boh" />
+    <term en="he vented" local="ha ventato" />
+    <term en="he killed" local="ha killato" />
+    <term en="he's clean" local="è pulito" />
+    <term en="let's vote" local="votiamo" />
+    <term en="skip (vote)" local="saltate" />
+    <term en="host (verb)" local="hosta" />
+    <term en="cheater" local="cheater / cheatta" />
+    <term en="camper" local="campera" />
+    <term en="in meeting" local="in riunione" />
+    <term en="who has the body?" local="chi ha il cadavere?" />
+    <term en="not me" local="non sono io" />
+    <term en="it's him" local="è lui" />
+    <term en="i saw him" local="l'ho visto" />
+    <term en="hide and seek" local="nascondino" />
+    <term en="nice one" local="bella" />
+  </category>
+</terminology>

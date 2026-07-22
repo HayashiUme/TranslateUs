@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="nl" language="Dutch">
+  <category name="roles">
+    <term en="impostor" local="bedrieger" />
+    <term en="crewmate" local="bemanningslid" />
+    <term en="shapeshifter" local="vormveranderaar" />
+    <term en="engineer" local="werktuigkundige" />
+    <term en="scientist" local="wetenschapper" />
+    <term en="guardian angel" local="beschermengel" />
+    <term en="phantom" local="fantoom" />
+    <term en="tracker" local="spoorzoeker" />
+    <term en="noisemaker" local="lawaaimaker / herrieschopper" />
+    <term en="detective" local="detective / rechercheur" />
+    <term en="viper" local="viper / adder" />
+    <term en="ghost" local="spook" />
+    <term en="seeker" local="zoeker" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="ventilatieschacht" />
+    <term en="report" local="rapporteren / melden" />
+    <term en="sabotage" local="saboteren / saboteren" />
+    <term en="kill" local="doden / vermoorden" />
+    <term en="vote" local="stemmen" />
+    <term en="skip" local="overslaan / skippen" />
+    <term en="self-report" local="zelf-rapport" />
+    <term en="camp" local="campen / blijven hangen" />
+    <term en="clear" local="vrijspreken / schoon / vrij" />
+    <term en="stack" local="stapelen / stacken" />
+    <term en="scan" local="scannen / scan" />
+    <term en="door" local="deuren sluiten" />
+    <term en="lights" local="lichten / verlichting saboteren" />
+    <term en="comms" local="communicatie storen" />
+    <term en="o2" local="zuurstof / O2" />
+    <term en="reactor" local="reactor" />
+    <term en="meeting" local="vergadering / meeting" />
+    <term en="emergency" local="noodgeval / noodvergadering" />
+    <term en="body" local="lijk / lichaam" />
+    <term en="task" local="taak / taken" />
+    <term en="eject" local="uit het spel zetten / ejecten" />
+    <term en="cooldown" local="afkoelperiode / cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="administratie / admin" />
+    <term en="cafeteria" local="cafetaria / kantine" />
+    <term en="communications" local="communicatie" />
+    <term en="electrical" local="elektrisch / elektra" />
+    <term en="upper engine" local="bovenste motor" />
+    <term en="lower engine" local="onderste motor" />
+    <term en="medbay" local="ziekenboeg / medbay" />
+    <term en="navigation" local="navigatie" />
+    <term en="o2 room" local="zuurstof" />
+    <term en="reactor room" local="reactor" />
+    <term en="security" local="beveiliging / camera's" />
+    <term en="shields" local="schilden" />
+    <term en="storage" local="opslag / magazijn" />
+    <term en="weapons" local="wapens / wapenkamer" />
+    <term en="hallway" local="gang" />
+    <term en="vitals" local="vitals" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus / verdacht" />
+    <term en="afk" local="afk / weg" />
+    <term en="gg" local="gg / goed gespeeld" />
+    <term en="gl" local="gl / succes" />
+    <term en="ty" local="thanks / bedankt / dankje" />
+    <term en="thx" local="thx / ty / dankjewel" />
+    <term en="np" local="np / geen probleem / gj" />
+    <term en="lol" local="lol" />
+    <term en="lmao" local="lmao / lol" />
+    <term en="xd" local="xd" />
+    <term en="wtf" local="wtf / wat de / huh" />
+    <term en="brb" local="brb / zo terug" />
+    <term en="idk" local="idk / geen idee / g.i." />
+    <term en="nvm" local="nvm / laat maar" />
+    <term en="tbf" local="tbf / eerlijk gezegd" />
+    <term en="imo" local="imo / naar mijn mening" />
+    <term en="tbh" local="tbh / eerlijk gezegd" />
+    <term en="rdm" local="rdm / random / zomaar" />
+    <term en="cap" local="cap / gelul / onzin" />
+    <term en="self" local="self / zelf" />
+    <term en="imp" local="imp / bedrieger" />
+    <term en="crew" local="crew / bemanning" />
+    <!-- Dutch community-specific slang -->
+    <term en="definitely" local="sowieso / sws" />
+    <term en="for sure" local="zeker weten" />
+    <term en="dude" local="gast" />
+    <term en="mate" local="maat" />
+    <term en="bro (street)" local="gap" />
+    <term en="just/simply" local="gewoon" />
+    <term en="right? (tag)" local="toch?" />
+    <term en="honestly" local="eerlijk" />
+    <term en="cheater/hacker" local="cheater / hacker" />
+    <term en="vent verb" local="ventte / gebruikte vent" />
+    <term en="emergency button" local="noodknop" />
+    <term en="let's vote" local="stemmen maar" />
+    <term en="it's red/blue" local="het is rood/blauw" />
+    <term en="it wasn't me" local="ik was het niet" />
+    <term en="hide and seek" local="verstoppertje" />
+    <term en="i was doing tasks" local="ik deed taken" />
+  </category>
+</terminology>

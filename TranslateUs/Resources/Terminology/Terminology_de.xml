@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="de" language="German">
+  <category name="roles">
+    <term en="impostor" local="Verräter / Hochstapler / Betrüger" />
+    <term en="crewmate" local="Besatzungsmitglied / Crewmitglied" />
+    <term en="shapeshifter" local="Formwandler / Gestaltwandler" />
+    <term en="engineer" local="Ingenieur" />
+    <term en="scientist" local="Wissenschaftler" />
+    <term en="guardian angel" local="Schutzengel" />
+    <term en="phantom" local="Phantom" />
+    <term en="tracker" local="Spürnase" />
+    <term en="noisemaker" local="Heulboje" />
+    <term en="detective" local="Detektiv" />
+    <term en="viper" local="Viper" />
+    <term en="ghost" local="Geist" />
+    <term en="seeker" local="Sucher" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="Lüftungsschacht / venten" />
+    <term en="report" local="Leiche melden / Report" />
+    <term en="sabotage" local="Sabotage / sabotieren" />
+    <term en="kill" local="töten / killen" />
+    <term en="vote" local="Abstimmung / voten" />
+    <term en="skip" local="enthalten / überspringen / skippen" />
+    <term en="self-report" local="Selbst-Report" />
+    <term en="camp" local="campen / herumlungern" />
+    <term en="clear" local="entlasten / sauber / clean" />
+    <term en="stack" local="stacken / stapeln" />
+    <term en="scan" local="scannen / Scan" />
+    <term en="door" local="Türen schließen" />
+    <term en="lights" local="Lichter sabotieren" />
+    <term en="comms" local="Kommunikation stören" />
+    <term en="o2" local="Sauerstoff / O2" />
+    <term en="reactor" local="Reaktor" />
+    <term en="meeting" local="Notfall-Treffen / Meeting" />
+    <term en="emergency" local="Notfall / Notbesprechung" />
+    <term en="body" local="Leiche" />
+    <term en="task" local="Aufgabe / Task" />
+    <term en="eject" local="rauswerfen / ejecten" />
+    <term en="cooldown" local="Abklingzeit / Cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="Verwaltung" />
+    <term en="cafeteria" local="Cafeteria / Kantine" />
+    <term en="communications" local="Kommunikation" />
+    <term en="electrical" local="Elektrik" />
+    <term en="upper engine" local="Oberer Maschinenraum" />
+    <term en="lower engine" local="Unterer Maschinenraum" />
+    <term en="medbay" local="Krankenstation / Medbay" />
+    <term en="navigation" local="Navigation" />
+    <term en="o2 room" local="Sauerstoff" />
+    <term en="reactor room" local="Reaktor" />
+    <term en="security" local="Sicherheit / Kameras" />
+    <term en="shields" local="Schilde" />
+    <term en="storage" local="Lager / Lagerraum" />
+    <term en="weapons" local="Waffen / Waffenkammer" />
+    <term en="hallway" local="Korridor / Gang" />
+    <term en="vitals" local="Vitals" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus / verdächtig" />
+    <term en="afk" local="afk / weg" />
+    <term en="gg" local="gg / gut gespielt" />
+    <term en="gl" local="gl / viel Glück" />
+    <term en="ty" local="danke / thx / ty" />
+    <term en="thx" local="danke / thx" />
+    <term en="np" local="np / kein Ding / kd" />
+    <term en="lol" local="lol" />
+    <term en="lmao" local="lmao / lol" />
+    <term en="xd" local="xd / XD" />
+    <term en="wtf" local="wtf / was zum / alter" />
+    <term en="brb" local="brb / bin gleich wieder da / bgwd" />
+    <term en="idk" local="idk / kp (kein Plan) / kA (keine Ahnung)" />
+    <term en="nvm" local="nvm / egal / schon gut" />
+    <term en="tbf" local="tbh / ehrlich gesagt" />
+    <term en="imo" local="imo / meiner Meinung nach" />
+    <term en="tbh" local="tbh / ehrlich gesagt / mal ehrlich" />
+    <term en="rdm" local="rdm / random / zufällig" />
+    <term en="cap" local="cap / Lüge / gelogen / Quatsch" />
+    <term en="self" local="self / selbst" />
+    <term en="imp" local="imp / Impo / Verräter" />
+    <term en="crew" local="crew / Crew / Besatzung" />
+    <!-- German community-specific slang -->
+    <term en="dude" local="Digga / Alter" />
+    <term en="brother" local="Bruder" />
+    <term en="for sure" local="safe / auf jeden" />
+    <term en="definitely not imp" local="safe kein Impo" />
+    <term en="crazy/wild" local="krass" />
+    <term en="bugged" local="verbuggt" />
+    <term en="cheater" local="Cheater / Hacker" />
+    <term en="vent (short)" local="Lüftung" />
+    <term en="emergency button" local="Notknopf" />
+    <term en="he's clean" local="der ist clean" />
+    <term en="it was (color)" local="der Rote/Blaue war's" />
+    <term en="it wasn't me" local="ich war's nicht" />
+    <term en="i was doing tasks" local="ich hab Tasks gemacht" />
+    <term en="where's the body?" local="wo ist die Leiche?" />
+  </category>
+</terminology>

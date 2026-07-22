@@ -101,21 +101,16 @@ public class Translator
 
     #region AI Translation
 
-    /// <summary>Get or generate the AI terminology guide for a target language.</summary>
-    private static async Task<string?> GetTerminologyGuide(SupportedLangs targetLang)
+    /// <summary>Get the pre-baked XML terminology guide for a target language.</summary>
+    private static string? GetTerminologyGuide(SupportedLangs targetLang)
     {
-        var guide = SlangCache.Get(targetLang);
-        if (guide == null)
-        {
-            guide = await SlangCache.Generate(targetLang);
-        }
-        return string.IsNullOrWhiteSpace(guide) ? null : guide;
+        return SlangCache.Get(targetLang);
     }
 
     private static async Task<string> TranslateViaAI(string text, SupportedLangs targetLang)
     {
         string targetLanguage = GetClientLanguageName(targetLang);
-        string? guide = await GetTerminologyGuide(targetLang);
+        string? guide = GetTerminologyGuide(targetLang);
         string prompt = PromptBuilder.BuildSinglePrompt(text, targetLanguage, guide);
         var payload = new
         {
@@ -132,7 +127,7 @@ public class Translator
         List<string> messages, SupportedLangs targetLang)
     {
         string targetLanguage = GetClientLanguageName(targetLang);
-        string? guide = await GetTerminologyGuide(targetLang);
+        string? guide = GetTerminologyGuide(targetLang);
         string prompt = PromptBuilder.BuildBatchPrompt(messages, targetLanguage, guide);
         var payload = new
         {

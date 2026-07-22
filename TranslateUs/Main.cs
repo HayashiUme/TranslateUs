@@ -3,10 +3,11 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
+using UnityEngine;
 
 namespace TranslateUs
 {
-    [BepInPlugin("ume.transalte.us", "Translate Us", "1.2.0")]
+    [BepInPlugin("ume.transalte.us", "Translate Us", "1.2.1")]
     public class Main : BasePlugin
     {
         public static ManualLogSource Logger = null!;
@@ -101,14 +102,20 @@ namespace TranslateUs
                 false,
                 "If true, your own chat bubble shows translated text. If false (default), shows your original typed text.");
 
-            UseAI = !string.IsNullOrWhiteSpace(ApiKey.Value) && ApiKey.Value != "0";
-            Logger.LogInfo(UseAI
-                ? $"TranslateUs: Using AI translation (Model: {Model.Value})"
-                : "TranslateUs: Using Google Translate (no API key configured)");
+            // For publish on Starlight, now disable using AI translation for Starlight ~~(not Android)~~ Players, ~~if you use a Google-fix version of FusionCore play TranslateUs is okay~~
+            bool isAndroid = Application.platform == RuntimePlatform.Android;
+            UseAI = !isAndroid && !string.IsNullOrWhiteSpace(ApiKey.Value) && ApiKey.Value != "0";
+
+            if (isAndroid)
+                Logger.LogInfo("Starlight detected — AI translation disabled, using Google Translate only.");
+            else
+                Logger.LogInfo(UseAI
+                    ? $"Using AI translation (Model: {Model.Value})"
+                    : "Using Google Translate (no API key configured)");
 
             Harmony = new Harmony("ume.transalte.us");
             Harmony.PatchAll();
-            Logger.LogInfo("=== Loaded Translate Us v1.2.0 ===");
+            Logger.LogInfo("=== Loaded Translate Us v1.2.1 ===");
         }
     }
 }

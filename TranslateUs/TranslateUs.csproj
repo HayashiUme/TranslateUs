@@ -18,5 +18,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Stop.png" />
     <EmbeddedResource Include="Resources\Resume.png" />
+    <EmbeddedResource Include="Resources\Terminology\Terminology_*.xml" />
   </ItemGroup>
 </Project>

@@ -8,10 +8,6 @@ namespace TranslateUs.Core;
 /// </summary>
 public static class LanguageDetector
 {
-    /// <summary>
-    /// Resolves the room language. Checks RoomLanguage config first,
-    /// then falls back to GameHostOptions.Keywords.
-    /// </summary>
     public static SupportedLangs ResolveRoomLanguage()
     {
         string configured = Main.RoomLanguage.Value.Trim();
@@ -35,10 +31,6 @@ public static class LanguageDetector
         return detected;
     }
 
-    /// <summary>
-    /// Parses a human-readable language name to SupportedLangs.
-    /// Accepts various common forms for user convenience.
-    /// </summary>
     private static SupportedLangs? ParseLanguageName(string name)
     {
         return name.ToLowerInvariant() switch

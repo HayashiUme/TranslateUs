@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="tl" language="Filipino">
+  <category name="roles">
+    <term en="impostor" local="impostor" />
+    <term en="crewmate" local="tripulante / crewmate" />
+    <term en="shapeshifter" local="shapeshifter" />
+    <term en="engineer" local="engineer / inhinyero" />
+    <term en="scientist" local="scientist / siyentipiko" />
+    <term en="guardian angel" local="guardian angel" />
+    <term en="phantom" local="phantom" />
+    <term en="tracker" local="tracker" />
+    <term en="noisemaker" local="noisemaker" />
+    <term en="detective" local="detective / detektib" />
+    <term en="viper" local="viper" />
+    <term en="ghost" local="multo / ghost" />
+    <term en="seeker" local="seeker / tagahanap" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="vent / butas" />
+    <term en="report" local="report / nag-report" />
+    <term en="sabotage" local="sabotage" />
+    <term en="kill" local="kill / patay" />
+    <term en="vote" local="vote / boto" />
+    <term en="skip" local="skip / nag-skip" />
+    <term en="self-report" local="self-report / nag-self-report" />
+    <term en="camp" local="camp / abang" />
+    <term en="clear" local="clear / malinis" />
+    <term en="stack" local="stack / tambak / siksikan" />
+    <term en="scan" local="scan / nag-scan" />
+    <term en="door" local="pinto / door" />
+    <term en="lights" local="ilaw / lights" />
+    <term en="comms" local="comms" />
+    <term en="o2" local="O2 / oxygen" />
+    <term en="reactor" local="reactor" />
+    <term en="meeting" local="meeting / pulong" />
+    <term en="emergency" local="emergency / emerhensiya" />
+    <term en="body" local="body / bangkay" />
+    <term en="task" local="task / gawain" />
+    <term en="eject" local="eject / tanggal" />
+    <term en="cooldown" local="cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="admin" />
+    <term en="cafeteria" local="cafeteria / kapeterya" />
+    <term en="communications" local="comms" />
+    <term en="electrical" local="electrical / elektrikal" />
+    <term en="upper engine" local="upper / engine" />
+    <term en="lower engine" local="lower / engine" />
+    <term en="medbay" local="medbay / med" />
+    <term en="navigation" local="nav / navigation" />
+    <term en="o2 room" local="O2" />
+    <term en="reactor room" local="reactor" />
+    <term en="security" local="security / cams / sec" />
+    <term en="shields" local="shields" />
+    <term en="storage" local="storage / bodega" />
+    <term en="weapons" local="weapons / armas" />
+    <term en="hallway" local="hallway / pasilyo" />
+    <term en="vitals" local="vitals" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus / kahina-hinala" />
+    <term en="afk" local="afk / wala ako" />
+    <term en="gg" local="gg" />
+    <term en="gl" local="gl / glgl" />
+    <term en="ty" local="ty / tnx / salamat" />
+    <term en="thx" local="thx / tnx / salamat" />
+    <term en="np" local="np / walang anuman" />
+    <term en="lol" local="lol / HAHAHA" />
+    <term en="lmao" local="lmao / HAHAHA / tawa" />
+    <term en="xd" local="xd" />
+    <term en="wtf" local="wtf / ano ba yan" />
+    <term en="brb" local="brb / balik ako" />
+    <term en="idk" local="idk / di ko alam / ewan" />
+    <term en="nvm" local="nvm / ok lang / wag na" />
+    <term en="tbf" local="tbf" />
+    <term en="imo" local="imo / sa tingin ko" />
+    <term en="tbh" local="tbh / sa totoo lang" />
+    <term en="rdm" local="rdm / random" />
+    <term en="cap" local="cap / sinungaling" />
+    <term en="self" local="self" />
+    <term en="imp" local="imp / impostor" />
+    <term en="crew" local="crew / tripulante" />
+    <!-- Filipino community-specific slang -->
+    <term en="it's (color)" local="si (color) yan" />
+    <term en="there's a body" local="may body" />
+    <term en="who killed?" local="sino pumatay?" />
+    <term en="let's go meeting" local="tara meeting" />
+    <term en="obvious" local="halata" />
+    <term en="i'm crew" local="ako crew" />
+    <term en="not me" local="di ako yan" />
+    <term en="i promise i'm crew" local="promise crew ako" />
+    <term en="he/she vented" local="nag-vent siya" />
+    <term en="i saw" local="nakita ko" />
+    <term en="where?" local="saan?" />
+    <term en="who?" local="sino?" />
+    <term en="are you sure?" local="sure ka?" />
+    <term en="is it legit?" local="legit ba?" />
+    <term en="wow/intense" local="grabe" />
+    <term en="idiot (playful)" local="gago / gagi" />
+    <term en="strong/good player" local="lakas" />
+    <term en="weak/bad player" local="hina" />
+    <term en="let's play" local="laro tayo" />
+    <term en="good game well played" local="GGWP" />
+    <term en="respect marker" local="po / opo" />
+    <term en="thank you (formal)" local="salamat po" />
+  </category>
+</terminology>

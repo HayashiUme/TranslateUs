@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="zh-TW" language="Traditional Chinese">
+  <category name="roles">
+    <term en="impostor" local="內鬼" />
+    <term en="crewmate" local="船員" />
+    <term en="shapeshifter" local="變形者" />
+    <term en="engineer" local="工程師" />
+    <term en="scientist" local="科學家" />
+    <term en="guardian angel" local="守護天使" />
+    <term en="phantom" local="幻影" />
+    <term en="tracker" local="追蹤者" />
+    <term en="noisemaker" local="大嗓門" />
+    <term en="detective" local="偵探" />
+    <term en="viper" local="毒蛇" />
+    <term en="ghost" local="幽靈" />
+    <term en="seeker" local="抓捕者" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="鑽管道" />
+    <term en="report" local="報告屍體" />
+    <term en="sabotage" local="破壞" />
+    <term en="kill" local="擊殺" />
+    <term en="vote" local="投票" />
+    <term en="skip" local="跳過" />
+    <term en="self-report" local="自報" />
+    <term en="camp" local="蹲點" />
+    <term en="clear" local="清白" />
+    <term en="stack" local="抱團" />
+    <term en="scan" local="掃描" />
+    <term en="door" local="關門" />
+    <term en="lights" local="關燈" />
+    <term en="comms" local="破壞通訊" />
+    <term en="o2" local="破壞氧氣" />
+    <term en="reactor" local="反應堆熔毀" />
+    <term en="meeting" local="開會" />
+    <term en="emergency" local="緊急會議" />
+    <term en="body" local="屍體" />
+    <term en="task" local="任務" />
+    <term en="eject" local="驅逐" />
+    <term en="cooldown" local="冷卻時間" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="管理室" />
+    <term en="cafeteria" local="餐廳" />
+    <term en="communications" local="通訊室" />
+    <term en="electrical" local="電氣室" />
+    <term en="upper engine" local="上引擎" />
+    <term en="lower engine" local="下引擎" />
+    <term en="medbay" local="醫務室" />
+    <term en="navigation" local="導航室" />
+    <term en="o2 room" local="氧氣室" />
+    <term en="reactor room" local="反應堆" />
+    <term en="security" local="監控室" />
+    <term en="shields" local="護盾室" />
+    <term en="storage" local="倉庫" />
+    <term en="weapons" local="武器庫" />
+    <term en="hallway" local="走廊" />
+    <term en="vitals" local="生命監測儀" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="可疑" />
+    <term en="afk" local="掛機" />
+    <term en="gg" local="GG（打得好）" />
+    <term en="gl" local="好運" />
+    <term en="ty" local="謝了" />
+    <term en="thx" local="3Q / 謝了" />
+    <term en="np" local="沒事" />
+    <term en="lol" local="哈哈 / 233" />
+    <term en="lmao" local="笑死" />
+    <term en="xd" local="嘻嘻" />
+    <term en="wtf" local="靠 / 甚麼鬼" />
+    <term en="brb" local="等一下" />
+    <term en="idk" local="不知道" />
+    <term en="nvm" local="算了" />
+    <term en="tbf" local="說真的" />
+    <term en="imo" local="我覺得" />
+    <term en="tbh" local="說實話" />
+    <term en="rdm" local="亂殺 / 隨機殺" />
+    <term en="cap" local="吹牛 / 騙人" />
+    <term en="self" local="自報" />
+    <term en="imp" local="內鬼" />
+    <term en="crew" local="船員" />
+    <!-- Chinese werewolf-game community slang (Traditional) -->
+    <term en="wolf (impostor)" local="狼" />
+    <term en="bandit (impostor)" local="匪" />
+    <term en="ghost (impostor)" local="鬼" />
+    <term en="knife (kill)" local="刀" />
+    <term en="ticket (vote)" local="票" />
+    <term en="jump (skip)" local="跳" />
+    <term en="gold water" local="金水" />
+    <term en="silver water" local="銀水" />
+    <term en="check-kill" local="查殺" />
+    <term en="paddle (coast)" local="划水" />
+    <term en="face-paste" local="貼臉" />
+    <term en="step on (accuse)" local="踩" />
+    <term en="protect (vouch)" local="保" />
+    <term en="coil (interrogate)" local="盤" />
+    <term en="unify vote" local="歸票" />
+    <term en="self-knife" local="自刀" />
+    <term en="drain water" local="排水" />
+    <term en="huddle" local="抱團" />
+    <term en="squat" local="蹲點" />
+    <term en="follow vote" local="跟票" />
+    <term en="turn card" local="翻牌" />
+    <term en="explode (exposed)" local="爆" />
+    <term en="dirty (frame)" local="髒" />
+  </category>
+</terminology>

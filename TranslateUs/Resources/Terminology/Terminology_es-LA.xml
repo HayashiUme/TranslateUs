@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="es-LA" language="Spanish (Latin America)">
+  <category name="roles">
+    <term en="impostor" local="impostor" />
+    <term en="crewmate" local="tripulante" />
+    <term en="shapeshifter" local="cambiaformas" />
+    <term en="engineer" local="ingeniero" />
+    <term en="scientist" local="científico" />
+    <term en="guardian angel" local="ángel guardián" />
+    <term en="phantom" local="fantasma" />
+    <term en="tracker" local="rastreador" />
+    <term en="noisemaker" local="ruidoso / escandaloso" />
+    <term en="detective" local="detective" />
+    <term en="viper" local="víbora / viper" />
+    <term en="ghost" local="fantasma" />
+    <term en="seeker" local="buscador" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="ventilación / conducto" />
+    <term en="report" local="reportar / reporte" />
+    <term en="sabotage" local="sabotaje / sabotear" />
+    <term en="kill" local="matar / asesinar" />
+    <term en="vote" local="votar / voto" />
+    <term en="skip" local="saltar / skip" />
+    <term en="self-report" local="autoreporte" />
+    <term en="camp" local="campear / acampar" />
+    <term en="clear" local="limpio / inocente / confirmado" />
+    <term en="stack" local="montón / stack" />
+    <term en="scan" local="escanear / scan" />
+    <term en="door" local="puerta" />
+    <term en="lights" local="luces" />
+    <term en="comms" local="comunicaciones / comms" />
+    <term en="o2" local="oxígeno / O2" />
+    <term en="reactor" local="reactor" />
+    <term en="meeting" local="reunión" />
+    <term en="emergency" local="emergencia / botón" />
+    <term en="body" local="cadáver / cuerpo" />
+    <term en="task" local="tarea" />
+    <term en="eject" local="expulsar / eyectar" />
+    <term en="cooldown" local="enfriamiento / cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="administración / admin" />
+    <term en="cafeteria" local="cafetería" />
+    <term en="communications" local="comunicaciones" />
+    <term en="electrical" local="electricidad / eléctrico" />
+    <term en="upper engine" local="motor superior" />
+    <term en="lower engine" local="motor inferior" />
+    <term en="medbay" local="enfermería" />
+    <term en="navigation" local="navegación" />
+    <term en="o2 room" local="oxígeno" />
+    <term en="reactor room" local="reactor" />
+    <term en="security" local="seguridad / cámaras" />
+    <term en="shields" local="escudos" />
+    <term en="storage" local="almacén" />
+    <term en="weapons" local="armas / arsenal" />
+    <term en="hallway" local="pasillo" />
+    <term en="vitals" local="vitales" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sospechoso / sus / sos" />
+    <term en="afk" local="afk" />
+    <term en="gg" local="gg / buena partida" />
+    <term en="gl" local="suerte / gl" />
+    <term en="ty" local="gracias / grax" />
+    <term en="thx" local="grax / thx" />
+    <term en="np" local="de nada / np / denada" />
+    <term en="lol" local="lol / jaja / jajaja" />
+    <term en="lmao" local="lmao / jajaja" />
+    <term en="xd" local="xd / XD" />
+    <term en="wtf" local="wtf / qpd (qué pedo)" />
+    <term en="brb" local="brb / ya vengo" />
+    <term en="idk" local="idk / ni idea / no sé / nose" />
+    <term en="nvm" local="nvm / olvídalo / da igual" />
+    <term en="tbf" local="tbf / para ser justo" />
+    <term en="imo" local="imo / en mi opinión" />
+    <term en="tbh" local="tbh / la verdad" />
+    <term en="rdm" local="rdm / random / aleatorio" />
+    <term en="cap" local="cap / mentira" />
+    <term en="self" local="self / auto" />
+    <term en="imp" local="imp / impostor" />
+    <term en="crew" local="tripu / trip / crew" />
+    <!-- Latin American community-specific slang -->
+    <term en="dude (Mexican)" local="wey / güey" />
+    <term en="dude (Argentine)" local="che" />
+    <term en="buddy" local="pana" />
+    <term en="bro" local="mano" />
+    <term en="troll" local="trol / trolear" />
+    <term en="hacker" local="hacker / jáquer" />
+    <term en="tryhard" local="tryhard" />
+    <term en="bugged" local="bugeado" />
+    <term en="lagging" local="lagueado" />
+    <term en="to rush" local="rushear" />
+    <term en="to farm" local="farmear" />
+    <term en="report body (phrase)" local="reportar cuerpo" />
+    <term en="skip vote (phrase)" local="saltar voto" />
+    <term en="it's (color)" local="es (color)" />
+    <term en="little ghost" local="fantasmita" />
+  </category>
+</terminology>

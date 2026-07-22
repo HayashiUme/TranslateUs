@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="ru" language="Russian">
+  <category name="roles">
+    <term en="impostor" local="предатель" />
+    <term en="crewmate" local="член экипажа" />
+    <term en="shapeshifter" local="оборотень" />
+    <term en="engineer" local="инженер" />
+    <term en="scientist" local="учёный" />
+    <term en="guardian angel" local="ангел-хранитель" />
+    <term en="phantom" local="фантом" />
+    <term en="tracker" local="следопыт" />
+    <term en="noisemaker" local="паникёр" />
+    <term en="detective" local="детектив" />
+    <term en="viper" local="гадюка" />
+    <term en="ghost" local="призрак" />
+    <term en="seeker" local="ищущий" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="вентиляция / вент" />
+    <term en="report" local="репорт / репортнуть" />
+    <term en="sabotage" local="саботаж / саботить" />
+    <term en="kill" local="убить / килл / кильнуть" />
+    <term en="vote" local="голосовать / голос" />
+    <term en="skip" local="скип / скипнуть" />
+    <term en="self-report" local="селф-репорт / саморепорт" />
+    <term en="camp" local="кемпить / кемп" />
+    <term en="clear" local="чистый / клир" />
+    <term en="stack" local="стакаться / стакать" />
+    <term en="scan" local="скан / сканировать" />
+    <term en="door" local="дверь / двери" />
+    <term en="lights" local="света нет" />
+    <term en="comms" local="связь" />
+    <term en="o2" local="кислород / О2" />
+    <term en="reactor" local="реактор / реак" />
+    <term en="meeting" local="собрание / мит" />
+    <term en="emergency" local="экстренное собрание / кнопка" />
+    <term en="body" local="труп / тело" />
+    <term en="task" local="задание / таск" />
+    <term en="eject" local="выбросить / изгнание" />
+    <term en="cooldown" local="кулдаун / КД" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="админ" />
+    <term en="cafeteria" local="столовая" />
+    <term en="communications" local="связь" />
+    <term en="electrical" local="электричество / электрика" />
+    <term en="upper engine" local="верхний двигатель" />
+    <term en="lower engine" local="нижний двигатель" />
+    <term en="medbay" local="медотсек" />
+    <term en="navigation" local="навигация / нав" />
+    <term en="o2 room" local="кислород" />
+    <term en="reactor room" local="реактор" />
+    <term en="security" local="безопасность / камеры" />
+    <term en="shields" local="щиты" />
+    <term en="storage" local="хранилище / склад" />
+    <term en="weapons" local="оружие / оружейка" />
+    <term en="hallway" local="коридор" />
+    <term en="vitals" local="виталс" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="сус / сусный / подозрительный" />
+    <term en="afk" local="афк / отошел" />
+    <term en="gg" local="гг" />
+    <term en="gl" local="гл / удачи" />
+    <term en="ty" local="спс / сяб / спасибо" />
+    <term en="thx" local="спс / пасиб" />
+    <term en="np" local="нп / не за что / нзч" />
+    <term en="lol" local="лол / ахах" />
+    <term en="lmao" local="лмао / ахахах / хд" />
+    <term en="xd" local="хд / XD" />
+    <term en="wtf" local="втф / чё / че" />
+    <term en="brb" local="брб / ща / сейчас" />
+    <term en="idk" local="идк / хз / не знаю" />
+    <term en="nvm" local="нвм / забудь / проехали" />
+    <term en="tbf" local="тбф / честно говоря" />
+    <term en="imo" local="имо / по моему / имхо" />
+    <term en="tbh" local="тбх / если честно" />
+    <term en="rdm" local="рдм / рандом / наугад" />
+    <term en="cap" local="кап / враньё" />
+    <term en="self" local="селф" />
+    <term en="imp" local="имп / предатель" />
+    <term en="crew" local="кру / член экипажа" />
+    <!-- Russian community-specific slang -->
+    <term en="mafia (impostor)" local="маф" />
+    <term en="red (suspect)" local="красный" />
+    <term en="cheater" local="читер" />
+    <term en="amogus (meme)" local="амогус" />
+    <term en="among as (meme)" local="амонг ас" />
+    <term en="report body (phrase)" local="репортнуть труп" />
+    <term en="skip vote (phrase)" local="скипнуть голос" />
+    <term en="button (emergency)" local="кнопка" />
+    <term en="grouping" local="сборка" />
+    <term en="noob" local="нуб / нубас" />
+    <term en="to throw (lose)" local="сливать" />
+    <term en="teammate" local="тимейт" />
+    <term en="afk player" local="афкшник" />
+    <term en="crab (bad player)" local="рак / рачить" />
+    <term en="cooldown (abbrev)" local="КД" />
+  </category>
+</terminology>

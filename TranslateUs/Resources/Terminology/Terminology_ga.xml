@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="ga" language="Irish">
+  <category name="roles">
+    <term en="impostor" local="mealltóir / feallaire" />
+    <term en="crewmate" local="ball foirne / criú" />
+    <term en="shapeshifter" local="athchumtha" />
+    <term en="engineer" local="innealtóir" />
+    <term en="scientist" local="eolaí" />
+    <term en="guardian angel" local="aingeal coimhdeachta" />
+    <term en="phantom" local="taibhse" />
+    <term en="tracker" local="lorgaire" />
+    <term en="noisemaker" local="torannóir" />
+    <term en="detective" local="bleachtaire" />
+    <term en="viper" local="nathair nimhe" />
+    <term en="ghost" local="taibhse / sprid / scáil" />
+    <term en="seeker" local="cuardaitheoir" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="gaothaire / poll" />
+    <term en="report" local="tuairisc a thabhairt" />
+    <term en="sabotage" local="loitiméireacht / sabaitéireacht" />
+    <term en="kill" local="maraigh / marú" />
+    <term en="vote" local="vótáil / vóta" />
+    <term en="skip" local="léim / scipeáil" />
+    <term en="self-report" local="féintuairisc" />
+    <term en="camp" local="campáil" />
+    <term en="clear" local="glan / tá sé glan" />
+    <term en="stack" local="carn" />
+    <term en="scan" local="grinneadh / scanadh" />
+    <term en="door" local="doras" />
+    <term en="lights" local="soilse" />
+    <term en="comms" local="cumarsáid" />
+    <term en="o2" local="ocsaigin" />
+    <term en="reactor" local="imoibreoir" />
+    <term en="meeting" local="cruinniú" />
+    <term en="emergency" local="éigeandáil / práinne" />
+    <term en="body" local="corp" />
+    <term en="task" local="tasc / cúram" />
+    <term en="eject" local="díbirt / caith amach" />
+    <term en="cooldown" local="fuarthréimhse / cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="riarachán" />
+    <term en="cafeteria" local="caifitéire" />
+    <term en="communications" local="cumarsáid" />
+    <term en="electrical" local="leictreach" />
+    <term en="upper engine" local="inneall uachtarach" />
+    <term en="lower engine" local="inneall íochtarach" />
+    <term en="medbay" local="bá leighis" />
+    <term en="navigation" local="loingseoireacht" />
+    <term en="o2 room" local="ocsaigin" />
+    <term en="reactor room" local="imoibreoir" />
+    <term en="security" local="slándáil" />
+    <term en="shields" local="sciatha" />
+    <term en="storage" local="stóras / taisce" />
+    <term en="weapons" local="airm" />
+    <term en="hallway" local="halla / pasáiste" />
+    <term en="vitals" local="comharthaí beatha" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="amhrasach / sus" />
+    <term en="afk" local="afk" />
+    <term en="gg" local="gg / cluiche maith" />
+    <term en="gl" local="gl / ádh mór" />
+    <term en="ty" local="ty / GRMA (go raibh maith agat)" />
+    <term en="thx" local="ty / GRMA" />
+    <term en="np" local="np / fadhb ar bith / FAB" />
+    <term en="lol" local="lol / gáire" />
+    <term en="lmao" local="lmao" />
+    <term en="xd" local="xd / XD" />
+    <term en="wtf" local="wtf" />
+    <term en="brb" local="brb / ar ais" />
+    <term en="idk" local="idk / níl a fhios agam" />
+    <term en="nvm" local="nvm / déan dearmad air" />
+    <term en="tbf" local="tbf / le bheith cothrom" />
+    <term en="imo" local="imo / is é mo thuairim" />
+    <term en="tbh" local="tbh / leis an fhírinne" />
+    <term en="rdm" local="rdm / randamach" />
+    <term en="cap" local="cap / bréag" />
+    <term en="self" local="self / féin" />
+    <term en="imp" local="imp" />
+    <term en="crew" local="crew / criú" />
+    <!-- Irish community-specific slang -->
+    <term en="thank you (abbrev)" local="GRMA" />
+    <term en="he's suspicious" local="tá sé amhrasach" />
+    <term en="i am (color)" local="is mise (dath)" />
+    <term en="it's not me" local="ní mise é" />
+    <term en="i saw him" local="chonaic mé é" />
+    <term en="where is...?" local="cá bhfuil...?" />
+    <term en="there's a body here" local="tá corp anseo" />
+    <term en="meeting!" local="cruinniú!" />
+    <term en="vote for (color)" local="vótáil do (dath)" />
+    <term en="skip" local="léim" />
+    <term en="well done" local="maith thú" />
+    <term en="i love it" local="is breá liom é" />
+    <term en="hello" local="dia duit" />
+    <term en="goodbye" local="slán" />
+    <term en="please" local="le do thoil" />
+    <term en="sorry" local="tá brón orm" />
+  </category>
+</terminology>

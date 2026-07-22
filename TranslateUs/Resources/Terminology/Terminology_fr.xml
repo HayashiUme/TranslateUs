@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<terminology locale="fr" language="French">
+  <category name="roles">
+    <term en="impostor" local="imposteur" />
+    <term en="crewmate" local="coéquipier / équipier" />
+    <term en="shapeshifter" local="métamorphe" />
+    <term en="engineer" local="ingénieur" />
+    <term en="scientist" local="scientifique" />
+    <term en="guardian angel" local="ange gardien" />
+    <term en="phantom" local="spectre" />
+    <term en="tracker" local="traqueur / pisteur" />
+    <term en="noisemaker" local="bruiteur" />
+    <term en="detective" local="détective" />
+    <term en="viper" local="vipère" />
+    <term en="ghost" local="fantôme" />
+    <term en="seeker" local="chercheur" />
+  </category>
+  <category name="actions">
+    <term en="vent" local="ventilation / conduit d'aération" />
+    <term en="report" local="signaler" />
+    <term en="sabotage" local="sabotage / saboter" />
+    <term en="kill" local="tuer / assassiner" />
+    <term en="vote" local="voter / vote" />
+    <term en="skip" local="passer / sauter" />
+    <term en="self-report" local="auto-signalement" />
+    <term en="camp" local="camper" />
+    <term en="clear" local="innocenter / blanchir" />
+    <term en="stack" local="stack / empiler" />
+    <term en="scan" local="scanner / scan" />
+    <term en="door" local="fermer les portes" />
+    <term en="lights" local="éteindre les lumières" />
+    <term en="comms" local="communications / comms" />
+    <term en="o2" local="oxygène / O2" />
+    <term en="reactor" local="réacteur" />
+    <term en="meeting" local="réunion" />
+    <term en="emergency" local="réunion d'urgence" />
+    <term en="body" local="cadavre / corps" />
+    <term en="task" local="tâche" />
+    <term en="eject" local="éjecter / expulser" />
+    <term en="cooldown" local="temps de recharge / cooldown" />
+  </category>
+  <category name="locations">
+    <term en="admin" local="administration" />
+    <term en="cafeteria" local="cafétéria / réfectoire" />
+    <term en="communications" local="communications" />
+    <term en="electrical" local="électricité" />
+    <term en="upper engine" local="moteur supérieur" />
+    <term en="lower engine" local="moteur inférieur" />
+    <term en="medbay" local="infirmerie" />
+    <term en="navigation" local="navigation" />
+    <term en="o2 room" local="oxygène" />
+    <term en="reactor room" local="réacteur" />
+    <term en="security" local="sécurité / caméras" />
+    <term en="shields" local="boucliers" />
+    <term en="storage" local="réserve / stockage" />
+    <term en="weapons" local="armurerie" />
+    <term en="hallway" local="couloir" />
+    <term en="vitals" local="signes vitaux" />
+  </category>
+  <category name="slang">
+    <term en="sus" local="sus / suspect" />
+    <term en="afk" local="afk / absent" />
+    <term en="gg" local="gg / bg (bien joué)" />
+    <term en="gl" local="gl / bonne chance" />
+    <term en="ty" local="merci / mrc" />
+    <term en="thx" local="mrc / thx" />
+    <term en="np" local="np / de rien / dr" />
+    <term en="lol" local="lol / mdr" />
+    <term en="lmao" local="lmao / ptdr / mdr" />
+    <term en="xd" local="xd" />
+    <term en="wtf" local="wtf / wsh / quoi" />
+    <term en="brb" local="brb / je reviens / jreviens" />
+    <term en="idk" local="idk / jsp / chépa" />
+    <term en="nvm" local="nvm / tkt / laisse" />
+    <term en="tbf" local="tbf / honnêtement" />
+    <term en="imo" local="imo / à mon avis" />
+    <term en="tbh" local="tbh / honnêtement / frr" />
+    <term en="rdm" local="rdm / random / au pif" />
+    <term en="cap" local="cap / mytho" />
+    <term en="self" local="self / auto" />
+    <term en="imp" local="imp / impost / impo" />
+    <term en="crew" local="crew / coéquipier / co" />
+    <!-- French community-specific slang -->
+    <term en="don't worry" local="tkt (t'inquiète)" />
+    <term en="liar" local="mytho" />
+    <term en="don't care" local="osef" />
+    <term en="guy" local="mec" />
+    <term en="girl" local="meuf" />
+    <term en="look (verlan)" local="tema" />
+    <term en="shady (verlan)" local="chellou" />
+    <term en="solid/confirmed" local="c'est carré" />
+    <term en="bro" local="gros" />
+    <term en="honestly bro" local="frr (frère)" />
+    <term en="it's him" local="c'est lui" />
+    <term en="who killed?" local="qui a kill ?" />
+    <term en="i scanned" local="j'ai scan" />
+    <term en="in meeting" local="en réu" />
+    <term en="he vented" local="il a vent" />
+    <term en="it's sus" local="c'est sus" />
+  </category>
+</terminology>
