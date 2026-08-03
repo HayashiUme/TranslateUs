@@ -151,17 +151,32 @@ namespace TranslateUs.Patches
             if (hud == null || hud.Chat == null || !hud.Chat.IsOpenOrOpening) return;
             if (hud.UICamera == null) return;
 
-            Vector3 pos = hud.UICamera.ScreenToWorldPoint(Input.mousePosition);
-            pos.z = 0f;
+            Vector3 worldPos = hud.UICamera.ScreenToWorldPoint(Input.mousePosition);
+            worldPos.z = 0f;
 
             var scroller = hud.Chat.GetComponentInChildren<Scroller>(true);
             if (scroller?.Inner == null) return;
 
-            for (int i = scroller.Inner.childCount - 1; i >= 0; i--)
+            // Convert mouse to scroller Inner local space for accurate per-bubble hit testing
+            Vector3 localMouse = scroller.Inner.InverseTransformPoint(worldPos);
+
+            for (int i = 0; i < scroller.Inner.childCount; i++)
             {
                 var bubble = scroller.Inner.GetChild(i).GetComponent<ChatBubble>();
                 if (bubble?.Background == null) continue;
-                if (!bubble.Background.bounds.Contains(pos)) continue;
+
+                // Hit-test: check if localMouse Y falls within this bubble's vertical span
+                Vector3 bubbleLocal = bubble.transform.localPosition;
+                float bubbleHalfH = bubble.Background.bounds.extents.y;
+                float top = bubbleLocal.y + bubbleHalfH;
+                float bot = bubbleLocal.y - bubbleHalfH;
+
+                Main.Logger.LogInfo($"[DIAG-RC] Bubble[{i}]: localY={bubbleLocal.y:F2}, " +
+                    $"halfH={bubbleHalfH:F2}, range=[{bot:F2}, {top:F2}], mouseLocalY={localMouse.y:F2}");
+
+                if (localMouse.y < bot || localMouse.y > top) continue;
+
+                Main.Logger.LogInfo($"[DIAG-RC] Hit bubble[{i}]!");
 
                 var group = MessageGroup.FindByBubble(bubble);
                 if (group == null)

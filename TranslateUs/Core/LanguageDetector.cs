@@ -1,11 +1,9 @@
+using AmongUs.Data;
 using AmongUs.GameOptions;
 
 namespace TranslateUs.Core;
 
-/// <summary>
-/// Resolves the room's spoken language. Uses manual config override if set;
-/// otherwise falls back to the host's Keywords setting.
-/// </summary>
+
 public static class LanguageDetector
 {
     public static SupportedLangs ResolveRoomLanguage()
@@ -24,11 +22,33 @@ public static class LanguageDetector
             Main.Logger.LogWarning($"[LangDetect] Unrecognized RoomLanguage '{configured}', falling back to Auto.");
         }
 
-        // Auto: use host Keywords
-        var keywords = GameOptionsManager.Instance.GameHostOptions.Keywords;
-        var detected = Translator.GameKeywordToSupportedLangs(keywords);
-        Main.Logger.LogInfo($"[LangDetect] Auto-detected room language from Keywords ({keywords}): {detected}");
-        return detected;
+        try
+        {
+            var instance = GameOptionsManager.Instance;
+            if (instance == null)
+            {
+                Main.Logger.LogWarning("[DIAG] LanguageDetector: GameOptionsManager.Instance is null (not in game/splash), falling back to client language");
+                return DataManager.Settings.Language.CurrentLanguage;
+            }
+
+            var options = instance.CurrentGameOptions;
+            if (options == null)
+            {
+                Main.Logger.LogWarning("[DIAG] LanguageDetector: CurrentGameOptions is null (not in game/splash), falling back to client language");
+                return DataManager.Settings.Language.CurrentLanguage;
+            }
+
+            var keywords = options.Keywords;
+            Main.Logger.LogInfo($"[DIAG] LanguageDetector: Keywords={keywords}");
+            var detected = Translator.GameKeywordToSupportedLangs(keywords);
+            Main.Logger.LogInfo($"[DIAG] LanguageDetector: Resolved roomLang={detected} (from Keywords={keywords})");
+            return detected;
+        }
+        catch (Exception ex)
+        {
+            Main.Logger.LogWarning($"[DIAG] LanguageDetector: Error reading game options ({ex.GetType().Name}: {ex.Message}), falling back to client language");
+            return DataManager.Settings.Language.CurrentLanguage;
+        }
     }
 
     private static SupportedLangs? ParseLanguageName(string name)

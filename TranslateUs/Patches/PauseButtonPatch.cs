@@ -24,7 +24,7 @@ namespace TranslateUs.Patches
             _pauseButton.name = "TranslatePauseButton";
 
             var localPos = _pauseButton.transform.localPosition;
-            _pauseButton.transform.localPosition = new Vector3(-3.9f, -2.7f, localPos.z);
+            _pauseButton.transform.localPosition = new Vector3(-3.9f, -2.5f, localPos.z);
 
             _pauseSprite = ResourcesUtils.LoadSpriteFromAssembly("Stop.png",50f);
             _resumeSprite = ResourcesUtils.LoadSpriteFromAssembly("Resume.png",50f);

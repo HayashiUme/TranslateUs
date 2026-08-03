@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using AmongUs.Data;
 using AmongUs.GameOptions;
+using UnityEngine;
 
 namespace TranslateUs.Core;
 
@@ -35,36 +36,63 @@ public class Translator
     {
         string diagSource = GetClientLanguageName(sourceLang);
         string diagTarget = GetClientLanguageName(targetLang);
-        Main.Logger.LogInfo($"[DIAG] Translate: {diagSource}→{diagTarget}, UseAI={Main.UseAI}, IsPaused={Main.IsPaused}, Input=\"{originalMessage}\"");
+        Main.Logger.LogInfo($"[DIAG] Translate: {diagSource}→{diagTarget}, Backend={Main.Backend}, IsPaused={Main.IsPaused}, Input=\"{originalMessage}\"");
 
         if (Main.IsPaused)
             return (originalMessage, originalMessage);
 
-        if (Main.UseAI)
+        switch (Main.Backend)
         {
-            try
-            {
-                string result = await TranslateViaAI(originalMessage, sourceLang, targetLang);
-                return (originalMessage, result);
-            }
-            catch (Exception ex)
-            {
-                Main.Logger.LogWarning($"TranslateUs: AI translation failed: {ex.Message}");
-                return (originalMessage, originalMessage);
-            }
-        }
-        else
-        {
-            try
-            {
-                string result = await TranslateViaGoogle(originalMessage, targetLang);
-                return (originalMessage, result);
-            }
-            catch (Exception ex)
-            {
-                Main.Logger.LogError($"TranslateUs: Google translation failed: {ex.Message}");
-                return (originalMessage, originalMessage);
-            }
+            case BackendType.LocalAI:
+                if (!LocalAiBackend.Instance.IsCacheReady)
+                {
+                    if (!LocalAiBackend.Instance.IsWarmingUp)
+                        _ = LocalAiBackend.Instance.WarmupAsync(sourceLang, targetLang);
+
+                    if (!LocalAiBackend.WarmupNotificationShown)
+                    {
+                        LocalAiBackend.WarmupNotificationShown = true;
+                        ShowWarmupNotification();
+                    }
+                    // Fall through to Google while warmup runs
+                    goto case BackendType.Google;
+                }
+
+                try
+                {
+                    string localResult = await TranslateViaLocalAi(originalMessage, sourceLang, targetLang);
+                    return (originalMessage, localResult);
+                }
+                catch (Exception ex)
+                {
+                    Main.Logger.LogWarning($"TranslateUs: LocalAI translation failed: {ex.Message}");
+                    return (originalMessage, originalMessage);
+                }
+
+            case BackendType.CloudAI:
+                try
+                {
+                    string aiResult = await TranslateViaAI(originalMessage, sourceLang, targetLang);
+                    return (originalMessage, aiResult);
+                }
+                catch (Exception ex)
+                {
+                    Main.Logger.LogWarning($"TranslateUs: AI translation failed: {ex.Message}");
+                    return (originalMessage, originalMessage);
+                }
+
+            case BackendType.Google:
+            default:
+                try
+                {
+                    string googleResult = await TranslateViaGoogle(originalMessage, targetLang);
+                    return (originalMessage, googleResult);
+                }
+                catch (Exception ex)
+                {
+                    Main.Logger.LogError($"TranslateUs: Google translation failed: {ex.Message}");
+                    return (originalMessage, originalMessage);
+                }
         }
     }
 
@@ -76,31 +104,57 @@ public class Translator
 
         string diagSource = GetClientLanguageName(sourceLang);
         string diagTarget = GetClientLanguageName(targetLang);
-        Main.Logger.LogInfo($"[DIAG] BatchTranslate: {diagSource}→{diagTarget}, Count={messages.Count}, UseAI={Main.UseAI}");
+        Main.Logger.LogInfo($"[DIAG] BatchTranslate: {diagSource}→{diagTarget}, Count={messages.Count}, Backend={Main.Backend}");
 
-        if (Main.UseAI)
+        switch (Main.Backend)
         {
-            try
-            {
-                return await BatchTranslateViaAI(messages, sourceLang, targetLang);
-            }
-            catch (Exception ex)
-            {
-                Main.Logger.LogWarning($"TranslateUs: AI batch translation failed: {ex.Message}");
-                return messages.Select(m => (m, m)).ToList();
-            }
-        }
-        else
-        {
-            try
-            {
-                return await BatchTranslateViaGoogle(messages, targetLang);
-            }
-            catch (Exception ex)
-            {
-                Main.Logger.LogError($"TranslateUs: Google batch translation failed: {ex.Message}");
-                return messages.Select(m => (m, m)).ToList();
-            }
+            case BackendType.LocalAI:
+                if (!LocalAiBackend.Instance.IsCacheReady)
+                {
+                    if (!LocalAiBackend.Instance.IsWarmingUp)
+                        _ = LocalAiBackend.Instance.WarmupAsync(sourceLang, targetLang);
+
+                    if (!LocalAiBackend.WarmupNotificationShown)
+                    {
+                        LocalAiBackend.WarmupNotificationShown = true;
+                        ShowWarmupNotification();
+                    }
+                    // Fall through to Google while warmup runs
+                    goto case BackendType.Google;
+                }
+
+                try
+                {
+                    return await BatchTranslateViaLocalAi(messages, sourceLang, targetLang);
+                }
+                catch (Exception ex)
+                {
+                    Main.Logger.LogWarning($"TranslateUs: LocalAI batch translation failed: {ex.Message}");
+                    return messages.Select(m => (m, m)).ToList();
+                }
+
+            case BackendType.CloudAI:
+                try
+                {
+                    return await BatchTranslateViaAI(messages, sourceLang, targetLang);
+                }
+                catch (Exception ex)
+                {
+                    Main.Logger.LogWarning($"TranslateUs: AI batch translation failed: {ex.Message}");
+                    return messages.Select(m => (m, m)).ToList();
+                }
+
+            case BackendType.Google:
+            default:
+                try
+                {
+                    return await BatchTranslateViaGoogle(messages, targetLang);
+                }
+                catch (Exception ex)
+                {
+                    Main.Logger.LogError($"TranslateUs: Google batch translation failed: {ex.Message}");
+                    return messages.Select(m => (m, m)).ToList();
+                }
         }
     }
 
@@ -212,6 +266,101 @@ public class Translator
             Main.Logger.LogWarning($"TranslateUs: Failed to parse batch response: {ex.Message}");
             return originals.Select(m => (m, m)).ToList();
         }
+    }
+
+    #endregion
+
+    #region Local AI Translation
+
+    private static async Task<string> TranslateViaLocalAi(
+        string text, SupportedLangs sourceLang, SupportedLangs targetLang)
+    {
+        string sourceLanguage = GetClientLanguageName(sourceLang);
+        string targetLanguage = GetClientLanguageName(targetLang);
+        var (sourceGuide, targetGuide) = GetTerminologyGuides(sourceLang, targetLang);
+
+        string prompt = PromptBuilder.BuildSinglePromptForLocalModel(
+            text, sourceLanguage, targetLanguage, sourceGuide, targetGuide);
+
+        // Check if backend is ready; wait briefly if still initializing
+        if (!LocalAiBackend.Instance.IsReady)
+        {
+            if (LocalAiBackend.Instance.IsInitializing)
+            {
+                bool ready = await LocalAiBackend.Instance.WaitForReady(TimeSpan.FromSeconds(5));
+                if (!ready)
+                {
+                    Main.Logger.LogWarning("[LocalAI] Model not yet ready, returning original text");
+                    return text;
+                }
+            }
+            else
+            {
+                Main.Logger.LogWarning("[LocalAI] Model failed to load, returning original text");
+                return text;
+            }
+        }
+
+        string? result = await LocalAiBackend.Instance.TranslateAsync(
+            prompt,
+            maxTokens: Main.MaxInferenceTokens?.Value ?? 128,
+            temperature: Main.InferenceTemperature?.Value ?? 0.1f);
+
+        if (result == null)
+        {
+            Main.Logger.LogWarning("[LocalAI] Translation returned null, returning original text");
+            return text;
+        }
+
+        Main.Logger.LogInfo($"TranslateUs: [LocalAI] \"{text}\" → \"{result}\"");
+        return result;
+    }
+
+    private static async Task<List<(string original, string translated)>> BatchTranslateViaLocalAi(
+        List<string> messages, SupportedLangs sourceLang, SupportedLangs targetLang)
+    {
+        string sourceLanguage = GetClientLanguageName(sourceLang);
+        string targetLanguage = GetClientLanguageName(targetLang);
+        var (sourceGuide, targetGuide) = GetTerminologyGuides(sourceLang, targetLang);
+
+        string prompt = PromptBuilder.BuildBatchPromptForLocalModel(
+            messages, sourceLanguage, targetLanguage, sourceGuide, targetGuide);
+
+        // Check backend readiness
+        if (!LocalAiBackend.Instance.IsReady)
+        {
+            if (LocalAiBackend.Instance.IsInitializing)
+            {
+                bool ready = await LocalAiBackend.Instance.WaitForReady(TimeSpan.FromSeconds(5));
+                if (!ready)
+                {
+                    Main.Logger.LogWarning("[LocalAI] Model not yet ready for batch, returning originals");
+                    return messages.Select(m => (m, m)).ToList();
+                }
+            }
+            else
+            {
+                Main.Logger.LogWarning("[LocalAI] Model not loaded, returning originals");
+                return messages.Select(m => (m, m)).ToList();
+            }
+        }
+
+        int batchTokens = Math.Min(128 * messages.Count, 1024);
+        string? responseText = await LocalAiBackend.Instance.TranslateAsync(
+            prompt,
+            maxTokens: batchTokens,
+            temperature: Main.InferenceTemperature?.Value ?? 0.1f);
+
+        if (responseText == null)
+        {
+            Main.Logger.LogWarning("[LocalAI] Batch translation returned null");
+            return messages.Select(m => (m, m)).ToList();
+        }
+
+        var results = ParseBatchResponse(messages, responseText);
+        int count = results.Count(r => r.translated != r.original);
+        Main.Logger.LogInfo($"TranslateUs: [LocalAI Batch] Translated {count}/{messages.Count} messages");
+        return results;
     }
 
     #endregion
@@ -404,6 +553,28 @@ public class Translator
             GameKeywords.TChinese => SupportedLangs.TChinese,
             _ => SupportedLangs.English
         };
+    }
+
+    #endregion
+
+    #region Warmup notification
+
+    private static void ShowWarmupNotification()
+    {
+        try
+        {
+            var hud = DestroyableSingleton<HudManager>.Instance;
+            if (hud?.Chat == null) return;
+
+            hud.Chat.AddChat(
+                PlayerControl.LocalPlayer,
+                "Local AI Prompt cache is running (15~30s). Your message has been temporarily translated with Google Translate.");
+            Main.Logger.LogInfo("[DIAG] Warmup notification shown in chat");
+        }
+        catch (Exception ex)
+        {
+            Main.Logger.LogWarning($"[DIAG] Failed to show warmup notification: {ex.Message}");
+        }
     }
 
     #endregion

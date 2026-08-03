@@ -11,6 +11,7 @@ public static class DisableOtherPlugins
     public static bool Prefix([HarmonyArgument(0)] PluginInfo pluginInfo, [HarmonyArgument(1)] Assembly pluginAssembly)
     {
         if (pluginInfo.Metadata.GUID == "dev.xtracube.authfix") Main.IsAuthFix = true;
+        if (pluginInfo.Metadata.GUID == "auavengers.localize.us") Main.IsLocalizeUs =  true;
         return true;
     }
 }
