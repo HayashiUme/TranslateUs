@@ -279,8 +279,9 @@ public class Translator
         string targetLanguage = GetClientLanguageName(targetLang);
         var (sourceGuide, targetGuide) = GetTerminologyGuides(sourceLang, targetLang);
 
-        string prompt = PromptBuilder.BuildSinglePromptForLocalModel(
-            text, sourceLanguage, targetLanguage, sourceGuide, targetGuide);
+        string prefix = PromptBuilder.BuildLocalModelPrefix(
+            sourceLanguage, targetLanguage, sourceGuide, targetGuide);
+        string suffix = PromptBuilder.BuildLocalModelSuffix(text);
 
         // Check if backend is ready; wait briefly if still initializing
         if (!LocalAiBackend.Instance.IsReady)
@@ -302,7 +303,7 @@ public class Translator
         }
 
         string? result = await LocalAiBackend.Instance.TranslateAsync(
-            prompt,
+            prefix, suffix,
             maxTokens: Main.MaxInferenceTokens?.Value ?? 128,
             temperature: Main.InferenceTemperature?.Value ?? 0.1f);
 
@@ -323,8 +324,10 @@ public class Translator
         string targetLanguage = GetClientLanguageName(targetLang);
         var (sourceGuide, targetGuide) = GetTerminologyGuides(sourceLang, targetLang);
 
-        string prompt = PromptBuilder.BuildBatchPromptForLocalModel(
-            messages, sourceLanguage, targetLanguage, sourceGuide, targetGuide);
+        string prefix = PromptBuilder.BuildLocalModelPrefix(
+            sourceLanguage, targetLanguage, sourceGuide, targetGuide);
+        string suffix = PromptBuilder.BuildLocalModelSuffix(
+            PromptBuilder.BuildLocalModelBatchUserContent(messages));
 
         // Check backend readiness
         if (!LocalAiBackend.Instance.IsReady)
@@ -347,7 +350,7 @@ public class Translator
 
         int batchTokens = Math.Min(128 * messages.Count, 1024);
         string? responseText = await LocalAiBackend.Instance.TranslateAsync(
-            prompt,
+            prefix, suffix,
             maxTokens: batchTokens,
             temperature: Main.InferenceTemperature?.Value ?? 0.1f);
 
