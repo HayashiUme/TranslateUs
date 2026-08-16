@@ -8,6 +8,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <!-- Windows-only native imports (kernel32 Job Objects for the llama-server subprocess).
+       Build with `-p:BuildForWindows=true` for the Windows DLL; omit it for the Android
+       DLL, which runs the model in-process and must not carry Windows imports. -->
+  <PropertyGroup Condition="'$(BuildForWindows)' == 'true'">
+    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.6.5" />
     <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1">
