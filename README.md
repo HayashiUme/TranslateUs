@@ -213,4 +213,3 @@ Starting from v1.2.2-pre:
 ## 7. Contact
 
 If you have questions about this privacy policy or the plugin's data handling, please open an issue on the project's repository.
-
