@@ -54,8 +54,7 @@ public class Translator
                         LocalAiBackend.WarmupNotificationShown = true;
                         ShowWarmupNotification();
                     }
-                    // Fall through to Google while warmup runs
-                    goto case BackendType.Google;
+                    return (originalMessage, originalMessage);
                 }
 
                 try
@@ -81,18 +80,9 @@ public class Translator
                     return (originalMessage, originalMessage);
                 }
 
-            case BackendType.Google:
+            case BackendType.None:
             default:
-                try
-                {
-                    string googleResult = await TranslateViaGoogle(originalMessage, targetLang);
-                    return (originalMessage, googleResult);
-                }
-                catch (Exception ex)
-                {
-                    Main.Logger.LogError($"TranslateUs: Google translation failed: {ex.Message}");
-                    return (originalMessage, originalMessage);
-                }
+                return (originalMessage, originalMessage);
         }
     }
 
@@ -119,8 +109,7 @@ public class Translator
                         LocalAiBackend.WarmupNotificationShown = true;
                         ShowWarmupNotification();
                     }
-                    // Fall through to Google while warmup runs
-                    goto case BackendType.Google;
+                    return messages.Select(m => (m, m)).ToList();
                 }
 
                 try
@@ -144,17 +133,9 @@ public class Translator
                     return messages.Select(m => (m, m)).ToList();
                 }
 
-            case BackendType.Google:
+            case BackendType.None:
             default:
-                try
-                {
-                    return await BatchTranslateViaGoogle(messages, targetLang);
-                }
-                catch (Exception ex)
-                {
-                    Main.Logger.LogError($"TranslateUs: Google batch translation failed: {ex.Message}");
-                    return messages.Select(m => (m, m)).ToList();
-                }
+                return messages.Select(m => (m, m)).ToList();
         }
     }
 
@@ -368,146 +349,6 @@ public class Translator
 
     #endregion
 
-    #region Google Translate
-
-    // Semaphore to prevent burst requests from triggering rate limits
-    private static readonly SemaphoreSlim GoogleSemaphore = new(1, 1);
-    private static DateTime _lastGoogleRequest = DateTime.MinValue;
-    private static readonly TimeSpan MinRequestInterval = TimeSpan.FromMilliseconds(500);
-
-    private static async Task<string> TranslateViaGoogle(string text, SupportedLangs targetLang)
-    {
-        string targetCode = ClientLangToGoogleCode(targetLang);
-
-        // Rate-limit guard: ensure minimum interval between requests
-        await GoogleSemaphore.WaitAsync();
-        try
-        {
-            var timeSinceLast = DateTime.UtcNow - _lastGoogleRequest;
-            if (timeSinceLast < MinRequestInterval)
-                await Task.Delay(MinRequestInterval - timeSinceLast);
-
-            string result = await GoogleRequestWithRetry(text, targetCode);
-            _lastGoogleRequest = DateTime.UtcNow;
-
-            if (result != text)
-                Main.Logger.LogInfo($"TranslateUs: [Google] \"{text}\" → \"{result}\"");
-
-            return result;
-        }
-        finally
-        {
-            GoogleSemaphore.Release();
-        }
-    }
-
-    private static async Task<List<(string original, string translated)>> BatchTranslateViaGoogle(
-        List<string> messages, SupportedLangs targetLang)
-    {
-        string targetCode = ClientLangToGoogleCode(targetLang);
-        var results = new List<(string original, string translated)>();
-
-        foreach (var msg in messages)
-        {
-            try
-            {
-                string translated = await TranslateViaGoogle(msg, targetLang);
-                results.Add((msg, translated));
-            }
-            catch
-            {
-                results.Add((msg, msg));
-            }
-        }
-
-        int count = results.Count(r => r.translated != r.original);
-        Main.Logger.LogInfo($"TranslateUs: [Google Batch] Translated {count}/{messages.Count} messages");
-        return results;
-    }
-    
-    private static async Task<string> GoogleRequestWithRetry(string text, string targetLangCode)
-    {
-        // Use a more stable client identifier than "gtx"
-        string url = $"https://translate.googleapis.com/translate_a/single" +
-                     $"?client=dict-chrome-ex&sl=auto&tl={targetLangCode}&dt=t&q={Uri.EscapeDataString(text)}";
-
-        int maxRetries = 3;
-        for (int attempt = 0; attempt < maxRetries; attempt++)
-        {
-            try
-            {
-                using var client = new HttpClient();
-                client.Timeout = TimeSpan.FromSeconds(10);
-                // Add a realistic User-Agent to avoid being blocked
-                client.DefaultRequestHeaders.Add("User-Agent",
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
-
-                string responseJson = await client.GetStringAsync(url);
-
-                using JsonDocument doc = JsonDocument.Parse(responseJson);
-                var root = doc.RootElement;
-
-                if (root.ValueKind == JsonValueKind.Array &&
-                    root.GetArrayLength() > 0 &&
-                    root[0].ValueKind == JsonValueKind.Array &&
-                    root[0].GetArrayLength() > 0 &&
-                    root[0][0].ValueKind == JsonValueKind.Array &&
-                    root[0][0].GetArrayLength() > 0)
-                {
-                    string translated = root[0][0][0].GetString() ?? text;
-                    return translated.Trim();
-                }
-
-                return text;
-            }
-            catch (HttpRequestException ex) when (attempt < maxRetries - 1)
-            {
-                int delay = (int)Math.Pow(2, attempt) * 1000; // 1s, 2s, 4s
-                Main.Logger.LogWarning($"TranslateUs: Google request failed (attempt {attempt + 1}/{maxRetries}), retrying in {delay}ms: {ex.Message}");
-                await Task.Delay(delay);
-            }
-            catch (TaskCanceledException) when (attempt < maxRetries - 1)
-            {
-                int delay = (int)Math.Pow(2, attempt) * 1000;
-                Main.Logger.LogWarning($"TranslateUs: Google request timed out (attempt {attempt + 1}/{maxRetries}), retrying in {delay}ms");
-                await Task.Delay(delay);
-            }
-        }
-
-        Main.Logger.LogError($"TranslateUs: Google translation failed after {maxRetries} attempts");
-        return text;
-    }
-
-    /// <summary>Public accessor for SlangCache notifications.</summary>
-    public static string ClientLangToGoogleCodeStatic(SupportedLangs lang)
-        => ClientLangToGoogleCode(lang);
-
-    private static string ClientLangToGoogleCode(SupportedLangs lang)
-    {
-        return lang switch
-        {
-            SupportedLangs.English => "en",
-            SupportedLangs.Spanish => "es",
-            SupportedLangs.Korean => "ko",
-            SupportedLangs.Russian => "ru",
-            SupportedLangs.Portuguese => "pt",
-            SupportedLangs.Brazilian => "pt",
-            SupportedLangs.Filipino => "tl",
-            SupportedLangs.French => "fr",
-            SupportedLangs.Italian => "it",
-            SupportedLangs.German => "de",
-            SupportedLangs.Dutch => "nl",
-            SupportedLangs.Japanese => "ja",
-            SupportedLangs.Latam => "es",
-            SupportedLangs.Irish => "ga",
-            SupportedLangs.SChinese => "zh-CN",
-            SupportedLangs.TChinese => "zh-TW",
-            _ => "en"
-        };
-    }
-
-    #endregion
-
     #region Language Helpers
 
     public static string GetClientLanguageName(SupportedLangs lang)
@@ -571,7 +412,7 @@ public class Translator
 
             hud.Chat.AddChat(
                 PlayerControl.LocalPlayer,
-                "Local AI Prompt cache is running (15~30s). Your message has been temporarily translated with Google Translate.");
+                "Local AI is preparing its prompt cache (15-30s). Messages will remain untranslated until it is ready.");
             Main.Logger.LogInfo("[DIAG] Warmup notification shown in chat");
         }
         catch (Exception ex)

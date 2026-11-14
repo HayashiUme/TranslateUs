@@ -15,8 +15,7 @@ namespace TranslateUs
         public static Harmony Harmony = null!;
 
         /// <summary>
-        /// API Key for the cloud AI translation service. Leave empty to use Google
-        /// or LocalAI instead.
+        /// API Key for the cloud AI translation service.
         /// </summary>
         public static ConfigEntry<string> ApiKey { get; private set; } = null!;
 
@@ -114,8 +113,7 @@ namespace TranslateUs
                 "Backend",
                 "Auto",
                 "Which translation backend to use. Options:\n" +
-                "  Auto    — LocalAI > Google (Android) / CloudAI if key set > Google\n" +
-                "  Google  — Free Google Translate API\n" +
+                "  Auto    — LocalAI if enabled, otherwise CloudAI when available\n" +
                 "  CloudAI — OpenAI-compatible cloud API (requires ApiKey)\n" +
                 "  LocalAI — Local GGUF model via llama.cpp (privacy-first)");
             
@@ -124,7 +122,7 @@ namespace TranslateUs
                 "UseLocalAI",
                 false,
                 "Enable local GGUF model translation (privacy-first, no network). " +
-                "When enabled, takes priority over AI and Google backends.");
+                "When enabled, takes priority over the cloud AI backend.");
 
             LocalModelPath = Config.Bind(
                 "LocalAI",
@@ -174,7 +172,7 @@ namespace TranslateUs
                 "Cloud AI",
                 "ApiKey",
                 "",
-                "API Key for AI translation. Leave empty to use free Google Translate instead.");
+                "API Key for AI translation. Required for CloudAI.");
 
             ApiUrl = Config.Bind(
                 "Cloud AI",
@@ -209,7 +207,6 @@ namespace TranslateUs
                 "If true, your own chat bubble shows translated text. If false (default), shows your original typed text.");
             
             bool isAndroid = OperatingSystem.IsAndroid();
-            bool isStarlight = isAndroid && IsAuthFix;
             string choice = TranslationBackend.Value;
 
             if (choice == "LocalAI")
@@ -222,21 +219,14 @@ namespace TranslateUs
             {
                 if (isAndroid)
                 {
-                    Logger.LogWarning(
-                        "CloudAI is disabled on Android for privacy. Falling back to Google. " +
-                        "Use 'LocalAI' or 'Google' instead.");
-                    Backend = BackendType.Google;
+                    Logger.LogWarning("CloudAI is disabled on Android. Translation is disabled; use LocalAI instead.");
+                    Backend = UseLocalAI.Value ? BackendType.LocalAI : BackendType.None;
                 }
                 else
                 {
                     Backend = BackendType.CloudAI;
                     Logger.LogInfo($"Using CLOUD AI translation (Model: {Model.Value})");
                 }
-            }
-            else if (choice == "Google")
-            {
-                Backend = BackendType.Google;
-                Logger.LogInfo("Using Google Translate");
             }
             else
             {
@@ -248,11 +238,8 @@ namespace TranslateUs
                 }
                 else if (isAndroid)
                 {
-                    Backend = BackendType.Google;
-                    if (isStarlight)
-                        Logger.LogInfo("Auto → Google (Starlight; LocalAI available via Backend=LocalAI)");
-                    else
-                        Logger.LogInfo("Auto → Google (Android; CloudAI disabled for privacy)");
+                    Backend = BackendType.None;
+                    Logger.LogInfo("Auto → translation disabled on Android; enable LocalAI to translate offline");
                 }
                 else if (!string.IsNullOrWhiteSpace(ApiKey.Value) && ApiKey.Value != "0")
                 {
@@ -261,8 +248,8 @@ namespace TranslateUs
                 }
                 else
                 {
-                    Backend = BackendType.Google;
-                    Logger.LogInfo("Auto → Google (no API key configured)");
+                    Backend = BackendType.None;
+                    Logger.LogInfo("Auto → translation disabled (no API key or LocalAI enabled)");
                 }
             }
 

@@ -2,7 +2,7 @@ namespace TranslateUs.Core;
 
 public enum BackendType
 {
-    Google,
+    None,
     CloudAI,
     LocalAI
 }
