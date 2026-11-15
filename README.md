@@ -8,7 +8,7 @@ Type in your language, they read in theirs. Configure a cloud AI provider, or ru
 
 ## Features
 
-- **Local AI** — Run a GGUF model (e.g. Qwen2.5-1.5B) fully offline via llama.cpp. Works on Windows **and Android**. Zero network, total privacy.
+- **Local AI** — Run a GGUF model (e.g. Qwen2.5-1.5B) fully offline via llama.cpp. Windows uses the separate ULMLoader plugin; Android retains the legacy in-process runtime.
 - **Prompt cache warmup** — After joining a lobby, the system prompt and terminology guide are decoded once and cached. Messages remain untranslated during the one-time warmup (~15–30s).
 - **Prompt-injection protection** — Chat text can't hijack the model ("forget your rules", "who are you", …); it only translates.
 - **Cloud AI** — Bring your own key (OpenAI, Zhipu, DeepSeek, any OpenAI-compatible endpoint). Windows only.
@@ -24,7 +24,7 @@ Type in your language, they read in theirs. Configure a cloud AI provider, or ru
 
 | Backend | Windows | Android |
 |---------|:-------:|:-------:|
-| Local AI (llama.cpp) | ✅ | ✅ |
+| Local AI (llama.cpp) | ✅ (ULMLoader) | ✅ (legacy) |
 | Cloud AI | ✅ | ❌ |
 
 ## Quick Start
@@ -47,7 +47,7 @@ Model = glm-4-flash
 
 ### Local AI (privacy-first, no internet — Windows & Android)
 
-1. Drop `TranslateUs.dll` into `BepInEx/plugins/`
+1. On Windows, drop both `ULMLoader.dll` and `TranslateUs.dll` into `BepInEx/plugins/`. Android uses the legacy TranslateUs build.
 2. Edit `BepInEx/config/ume.transalte.us.cfg`:
 
 ```ini
@@ -55,9 +55,11 @@ Model = glm-4-flash
 Backend = LocalAI
 ```
 
-3. Launch. The llama.cpp runtime downloads automatically, then the model (~1 GB) downloads once with a progress bar on the splash screen.
+3. Launch. On Windows, the llama.cpp runtime downloads automatically, then the model (~1 GB) downloads once with a progress display on the splash screen.
 
-> **Android note:** On Android the native runtime (`libllama.so` + GGML CPU backend) is downloaded and loaded in-process — no `llama-server` subprocess, so it works straight from internal storage.
+> **ULMLoader:** Runtime and model files are stored under `Application.persistentDataPath/ULMLoader`. Runtime release, mirror, CPU/Vulkan backend, threads, context, KV cache types, and GPU layers are configured in `BepInEx/config/ume.ulm.loader.cfg`. The default pinned runtime is llama.cpp `b12359`; official CPU and Vulkan archives are SHA-256 verified.
+>
+> **Android note:** Android builds are still handled by the legacy TranslateUs in-process runtime and are not part of the Windows ULMLoader migration.
 
 ## Configuration
 
@@ -82,11 +84,20 @@ Backend = LocalAI
 |-----|---------|-------------|
 | `LocalModelPath` | *(empty)* | Path to a `.gguf` file. Leave empty to auto-download Qwen 2.5 1.5B. |
 | `LocalModelUrl` | HuggingFace URL | Download URL for the GGUF model |
-| `NativeLibUrl` | GitHub releases | Base URL for llama.cpp runtime downloads |
-| `InferenceThreads` | `2` | CPU threads for inference (keep low to avoid frame drops) |
-| `ContextSize` | `4096` | KV-cache context size in tokens |
 | `MaxInferenceTokens` | `128` | Max tokens per translation |
 | `InferenceTemperature` | `0.1` | Temperature (0.0–2.0). Lower = more deterministic |
+
+### [ULMLoader] (Windows local runtime)
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `Runtime/Release` | `b12359` | Pinned llama.cpp release/nightly tag |
+| `Runtime/Backend` | `cpu` | `cpu` or `vulkan` on Windows x64 |
+| `Runtime/BaseUrl` | GitHub releases | Runtime download mirror base URL |
+| `Inference/Threads` | `2` | CPU threads used for inference |
+| `Inference/ContextSize` | `4096` | KV cache context length |
+| `Inference/KvCacheTypeK` / `KvCacheTypeV` | `f16` | KV storage type (`f16`, `q8_0`, `q4_0`) |
+| `Inference/GpuLayers` | `0` | GPU offload layers; requires the Vulkan runtime |
 
 ### [Translation]
 

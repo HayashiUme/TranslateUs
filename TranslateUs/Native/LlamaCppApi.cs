@@ -5,7 +5,7 @@ namespace TranslateUs.Native;
 /// <summary>
 /// P/Invoke declarations for llama.cpp C API.
 ///
-/// Targets llama.cpp <b>b10142</b> (the ReleaseTag in <see cref="Core.NativeLibraryManager"/>).
+/// Legacy Android P/Invoke bindings; Windows builds delegate the runtime to ULMLoader.
 /// Struct layouts and signatures MUST match this exact build — the API changed substantially
 /// from older tags, and a mismatch here is silent (it corrupts memory / returns garbage):
 /// </summary>

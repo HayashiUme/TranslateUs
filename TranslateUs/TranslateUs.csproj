@@ -8,12 +8,21 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <!-- Windows-only native imports (kernel32 Job Objects for the llama-server subprocess).
-       Build with `-p:BuildForWindows=true` for the Windows DLL; omit it for the Android
-       DLL, which runs the model in-process and must not carry Windows imports. -->
+  <!-- Windows delegates model loading to ULMLoader; false retains the legacy Android path. -->
   <PropertyGroup Condition="'$(BuildForWindows)' == 'true'">
     <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(BuildForWindows)' == 'true'">
+    <ProjectReference Include="..\ULMLoader\ULMLoader.csproj" />
+    <Compile Remove="Core\Backend\LocalAiBackend.cs;Core\NativeLibraryManager.cs;Core\ModelManager.cs;Core\DownloadProgress.cs;Core\Utils\DownloadUtils.cs;Core\Utils\IoUtils.cs;Native\LlamaCppApi.cs;Patches\SplashManagerPatch.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildForWindows)' != 'true'">
+    <Compile Remove="Core\Backend\LoaderAiBackend.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildForWindows)' == 'true'">
+    <Compile Remove="Core\Manager\ServerProcessManager.cs;Core\Manager\JobObjectHelper.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.9.29" />

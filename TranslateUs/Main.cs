@@ -4,11 +4,17 @@ using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using TranslateUs.Core;
+#if WINDOWS
+using ULMLoader.API;
+#endif
 using UnityEngine;
 
 namespace TranslateUs
 {
     [BepInPlugin("ume.transalte.us", "Translate Us", "1.3.0")]
+#if WINDOWS
+    [BepInDependency("ume.ulm.loader", BepInDependency.DependencyFlags.HardDependency)]
+#endif
     public class Main : BasePlugin
     {
         public static ManualLogSource Logger = null!;
@@ -61,11 +67,9 @@ namespace TranslateUs
         /// </summary>
         public static ConfigEntry<string> LocalModelUrl { get; private set; } = null!;
 
-        /// <summary>
-        /// Base URL for llama.cpp native runtime downloads.
-        /// Change to a mirror if GitHub is slow/unreachable.
-        /// </summary>
+#if !WINDOWS
         public static ConfigEntry<string> NativeLibUrl { get; private set; } = null!;
+#endif
 
         /// <summary>
         /// Maximum tokens to generate per translation request.
@@ -137,12 +141,6 @@ namespace TranslateUs
                 "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf",
                 "Download URL for the GGUF model file when LocalModelPath is empty.");
 
-            NativeLibUrl = Config.Bind(
-                "LocalAI",
-                "NativeLibUrl",
-                "https://github.com/ggerganov/llama.cpp/releases/download",
-                "Base URL for llama.cpp native runtime downloads. Change to a mirror if GitHub is slow.");
-
             MaxInferenceTokens = Config.Bind(
                 "LocalAI",
                 "MaxInferenceTokens",
@@ -155,6 +153,10 @@ namespace TranslateUs
                 0.1f,
                 "Temperature for inference (0.0-2.0). Lower values produce more deterministic translations.");
 
+#if !WINDOWS
+            NativeLibUrl = Config.Bind("LocalAI", "NativeLibUrl",
+                "https://github.com/ggerganov/llama.cpp/releases/download",
+                "Base URL for llama.cpp runtime downloads.");
             InferenceThreads = Config.Bind(
                 "LocalAI",
                 "InferenceThreads",
@@ -167,6 +169,7 @@ namespace TranslateUs
                 4096,
                 "KV-cache context size in tokens. Larger values allow longer prompts " +
                 "(terminology guides + system prompt) but use more memory. 4096 is a safe default.");
+#endif
 
             ApiKey = Config.Bind(
                 "Cloud AI",
@@ -253,10 +256,20 @@ namespace TranslateUs
                 }
             }
 
+#if WINDOWS
+            if (Backend == BackendType.LocalAI)
+            {
+                ULMLoader.API.LocalModel.Configure(new ModelRequest(
+                    "qwen2.5-1.5b-instruct-q4_k_m",
+                    LocalModelUrl.Value,
+                    string.IsNullOrWhiteSpace(LocalModelPath.Value) ? null : LocalModelPath.Value));
+            }
+#endif
+
             Harmony = new Harmony("ume.transalte.us");
             Harmony.PatchAll();
 
-            // Ensure llama-server.exe is killed when the game exits
+            // Android retains its legacy in-process runtime cleanup.
             Application.add_quitting(new System.Action(OnGameQuit));
 
             Logger.LogInfo("=== Loaded Translate Us v1.3.0 ===");
@@ -267,8 +280,10 @@ namespace TranslateUs
             try
             {
                 Logger.LogInfo("[Main] Game quitting — cleaning up LocalAI...");
+#if !WINDOWS
                 LocalAiBackend.Instance.Dispose();
                 Core.Manager.ServerProcessManager.KillAll();
+#endif
                 Logger.LogInfo("[Main] Cleanup complete.");
             }
             catch (Exception ex)
@@ -277,23 +292,5 @@ namespace TranslateUs
             }
         }
 
-        private static async Task InitializeLocalBackend()
-        {
-            try
-            {
-                string modelPath = await ModelManager.AcquireModelAsync(
-                    LocalModelPath.Value,
-                    LocalModelUrl.Value);
-
-                LocalAiBackend.Instance.BeginInitialize(
-                    modelPath,
-                    threads: InferenceThreads.Value,
-                    contextSize: ContextSize.Value);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"[Main] Failed to initialize local model: {ex.Message}");
-            }
-        }
     }
 }

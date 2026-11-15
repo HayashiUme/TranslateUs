@@ -8,7 +8,7 @@
 
 ## 功能特性
 
-- **本地 AI** — 通过 llama.cpp 完全离线运行 GGUF 模型(例如 Qwen2.5-1.5B)。Windows **和 Android** 均可使用。零联网、隐私无忧。
+- **本地 AI** — 通过 llama.cpp 完全离线运行 GGUF 模型(例如 Qwen2.5-1.5B)。Windows 使用独立的 ULMLoader 插件；Android 暂时保留原有进程内运行时。
 - **提示词缓存预热** — 进入房间后,系统提示词和术语表只解码一次并缓存。首次预热(约 15–30 秒)期间消息暂不翻译,完成后即可使用本地模型。
 - **提示注入防护** — 聊天正文无法劫持模型(如"忘记你的规则""你是谁"等),模型只负责翻译。
 - **云端 AI** — 自带 Key(OpenAI、智谱、DeepSeek 或任意 OpenAI 兼容接口)。仅限 Windows。
@@ -24,14 +24,14 @@
 
 | 后端 | Windows | Android |
 |------|:-------:|:-------:|
-| 本地 AI(llama.cpp) | ✅ | ✅ |
+| 本地 AI(llama.cpp) | ✅ (ULMLoader) | ✅ (旧实现) |
 | 云端 AI | ✅ | ❌ |
 
 ## 快速开始
 
 ### 云端 AI(Windows,俚语效果更好)
 
-1. 把 `TranslateUs.dll` 丢进 `BepInEx/plugins/`
+1. 把 `TranslateUs.dll` 放进 `BepInEx/plugins/`
 2. 启动一次 Among Us 生成配置文件
 3. 编辑 `BepInEx/config/ume.transalte.us.cfg`:
 
@@ -47,7 +47,7 @@ Model = glm-4-flash
 
 ### 本地 AI(隐私优先、无需联网 —— Windows 和 Android)
 
-1. 把 `TranslateUs.dll` 丢进 `BepInEx/plugins/`
+1. Windows 上把 `ULMLoader.dll` 和 `TranslateUs.dll` 都放进 `BepInEx/plugins/`。Android 使用旧版 TranslateUs 构建。
 2. 编辑 `BepInEx/config/ume.transalte.us.cfg`:
 
 ```ini
@@ -55,9 +55,11 @@ Model = glm-4-flash
 Backend = LocalAI
 ```
 
-3. 启动游戏。llama.cpp 运行库会自动下载,然后模型(约 1 GB)会下载一次,并在启动画面上显示进度条。
+3. 启动游戏。Windows 会自动下载 llama.cpp 运行库和模型(约 1 GB),并在启动画面上显示进度。
 
-> **Android 说明:** 在 Android 上,原生运行库(`libllama.so` + GGML CPU 后端)会下载并进程内加载 —— 不需要 `llama-server` 子进程,因此可直接从内部存储正常运行。
+> **ULMLoader:** 运行库和模型存放在 `Application.persistentDataPath/ULMLoader`。运行库版本、镜像、CPU/Vulkan 后端、线程数、上下文、KV 缓存类型和 GPU 层数在 `BepInEx/config/ume.ulm.loader.cfg` 中配置。默认固定使用 llama.cpp `b12359`；官方 CPU 和 Vulkan 压缩包会进行 SHA-256 校验。
+>
+> **Android 说明:** Android 仍由 TranslateUs 原有的进程内运行时负责，本次 Windows ULMLoader 拆分暂不涵盖 Android。
 
 ## 配置
 
@@ -82,11 +84,20 @@ Backend = LocalAI
 |-----|---------|-------------|
 | `LocalModelPath` | *(空)* | `.gguf` 模型文件路径。留空则自动下载 Qwen 2.5 1.5B。 |
 | `LocalModelUrl` | HuggingFace 链接 | GGUF 模型的下载地址 |
-| `NativeLibUrl` | GitHub releases | llama.cpp 运行库下载的基础地址 |
-| `InferenceThreads` | `2` | 推理用的 CPU 线程数(建议保持较低以免掉帧) |
-| `ContextSize` | `4096` | KV 缓存上下文大小(单位:token) |
 | `MaxInferenceTokens` | `128` | 每次翻译生成的最大 token 数 |
 | `InferenceTemperature` | `0.1` | 温度(0.0–2.0)。越低越确定 |
+
+### [ULMLoader](Windows 本地运行时)
+
+| 键 | 默认值 | 说明 |
+|-----|---------|-------------|
+| `Runtime/Release` | `b12359` | 固定使用的 llama.cpp 版本/构建标签 |
+| `Runtime/Backend` | `cpu` | Windows x64 的 `cpu` 或 `vulkan` 后端 |
+| `Runtime/BaseUrl` | GitHub releases | 运行库下载镜像基础地址 |
+| `Inference/Threads` | `2` | 模型推理使用的 CPU 线程数 |
+| `Inference/ContextSize` | `4096` | KV 缓存上下文长度 |
+| `Inference/KvCacheTypeK` / `KvCacheTypeV` | `f16` | KV 存储类型(`f16`、`q8_0`、`q4_0`) |
+| `Inference/GpuLayers` | `0` | GPU offload 层数；需要 Vulkan 运行库 |
 
 ### [Translation]
 
